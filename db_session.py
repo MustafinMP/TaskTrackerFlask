@@ -2,29 +2,27 @@ import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
 import sqlalchemy.ext.declarative as dec
+from config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
 
 SqlAlchemyBase = dec.declarative_base()
 
 __factory = None
+DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
-def global_init(db_file):
+def global_init():
     global __factory
 
     if __factory:
         return
 
-    if not db_file or not db_file.strip():
-        raise Exception("Необходимо указать файл базы данных.")
+    print(f"Подключение к базе данных {DB_NAME}")
 
-    conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
-    print(f"Подключение к базе данных по адресу {conn_str}")
-
-    engine = sa.create_engine(conn_str, echo=False)
+    engine = sa.create_engine(DATABASE_URL, echo=False)
     __factory = orm.sessionmaker(bind=engine)
 
-    import __all_models
-
+    from auth.models import User
+    from tasks.models import Task
     SqlAlchemyBase.metadata.create_all(engine)
 
 

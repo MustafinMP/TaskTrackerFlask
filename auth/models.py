@@ -11,7 +11,6 @@ class User(SqlAlchemyBase, UserMixin):
 
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     name: str = Column(String, nullable=True)
-    about: str = Column(String, nullable=True)
     email: str = Column(String, index=True, unique=True, nullable=True)
     hashed_password: str = Column(String, nullable=True)
     created_date: datetime = Column(TIMESTAMP, default=datetime.now)
