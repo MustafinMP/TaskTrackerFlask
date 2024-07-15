@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask_login import LoginManager
 
 from auth.blueprint import blueprint as blueprint_auth
+from tasks.blueprint import blueprint as blueprint_tasks
 from auth.models import User
 from config import SECRET_KEY
 import db_session
@@ -19,6 +20,7 @@ def load_user(user_id):
 
 
 app.register_blueprint(blueprint_auth, url_prefix='/auth')
+app.register_blueprint(blueprint_tasks, url_prefix='/tasks')
 
 
 @app.route('/')

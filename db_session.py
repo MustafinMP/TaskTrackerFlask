@@ -1,10 +1,9 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
-from sqlalchemy.orm import Session
-import sqlalchemy.ext.declarative as dec
+from sqlalchemy.orm import Session, declarative_base
 from config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
 
-SqlAlchemyBase = dec.declarative_base()
+SqlAlchemyBase = declarative_base()
 
 __factory = None
 DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
