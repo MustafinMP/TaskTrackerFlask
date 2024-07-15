@@ -1,0 +1,13 @@
+{% extends "basic_template.html" %}
+
+{% block content %}
+<h1>Мои задачи</h1>
+{% if current_user.is_authenticated %}
+{% for task in data %}
+<div class="task-card">
+    <h2>{{ task.name }}</h2>
+    <p>{{ task.description }}</p>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

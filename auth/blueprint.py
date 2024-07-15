@@ -6,6 +6,7 @@ from auth.forms import LoginForm, RegisterForm
 from auth.models import User
 
 blueprint = Blueprint('auth', __name__)
+prefix = '/auth'
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])
@@ -34,8 +35,8 @@ def register():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/auth/login')
-    return render_template('auth/register.html', title='Регистрация', form=form)
+        return redirect(prefix + '/login')
+    return render_template(prefix + '/' + 'register.html', title='Регистрация', form=form)
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])
@@ -48,8 +49,8 @@ def login():
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
         return render_template(
-            'auth/login.html',
+            prefix + '/' + 'login.html',
             message="Неправильный логин или пароль",
             form=form
         )
-    return render_template('auth/login.html', title='Авторизация', form=form)
+    return render_template(prefix + '/' + 'login.html', title='Авторизация', form=form)
