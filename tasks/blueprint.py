@@ -16,7 +16,6 @@ def all_tasks():
     if current_user.is_authenticated:
         session = db_session.create_session()
         data: list = session.query(Task).where(current_user.id == Task.creator).all()
-    print(data)
     return render_template(path + 'tasks.html', data=data)
 
 
@@ -32,5 +31,5 @@ def add_news():
         task.creator = current_user.get_id()
         session.add(task)
         session.commit()
-        return redirect('/')
+        return redirect('/tasks')
     return render_template(path + 'create.html', form=form)
