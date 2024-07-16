@@ -3,11 +3,29 @@
 {% block content %}
 <h1>Мои задачи</h1>
 {% if current_user.is_authenticated %}
+<div class="row row-cols-1 row-cols-md-5 g-4 mx-auto w-75 bg-light">
 {% for task in data %}
-<div class="task-card">
-    <h2>{{ task.name }}</h2>
-    <p>{{ task.description }}</p>
-</div>
+    <div class="col">
+        <a href="/tasks/{{ task.id }}" class="card text-decoration-none {{ 'text-bg-light' if task.status == 0 else 'text-bg-warning' if task.status == 1 else 'text-bg-success' }} mb-3"
+             style="max-width: 18rem;">
+            <div class="card-header">{{ task.created_date.strftime('%Y-%m-%d') }}</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ task.name }}</h5>
+                <p class="card-text">{{ task.description }}</p>
+            </div>
+        </a>
+    </div>
+    <div class="col">
+        <div class="card {{ 'text-bg-light' if task.status == 0 else 'text-bg-warning' if task.status == 1 else 'text-bg-success' }} mb-3"
+             style="max-width: 18rem;">
+            <div class="card-header">{{ task.created_date.strftime('%Y-%m-%d') }}</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ task.name }}</h5>
+                <p class="card-text">{{ task.description }}</p>
+            </div>
+        </div>
+    </div>
 {% endfor %}
+</div>
 {% endif %}
 {% endblock %}
