@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template
+from flask import Blueprint, redirect, render_template, request, abort
 from flask_login import login_required, current_user
 
 import db_session
@@ -21,7 +21,7 @@ def all_tasks():
 
 @blueprint.route('/create', methods=['GET', 'POST'])
 @login_required
-def add_news():
+def add_task():
     form = CreateTaskForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -33,3 +33,27 @@ def add_news():
         session.commit()
         return redirect('/tasks')
     return render_template(path + 'create.html', form=form)
+
+
+@blueprint.route('/<int:task_id>', methods=['GET', 'POST'])
+@login_required
+def show_task(task_id: int):
+    if not current_user.is_authenticated:
+        return abort(404)
+    session = db_session.create_session()
+    task: Task = session.query(Task).where(current_user.id == Task.creator and Task.id == task_id).first()
+    if not task:
+        return abort(404)
+    return render_template(path + 'show_task.html', task=task)
+
+
+@blueprint.route('/edit/<task_id>', methods=['GET', 'PUT'])
+@login_required
+def edit_task(task_id: int):  # TODO: put request
+    if request.method == 'GET':
+        form = CreateTaskForm()
+        session = db_session.create_session()
+        task: Task = session.query(Task).where(Task.id == task_id).first()
+        form.name.data = task.name
+        form.description.data = task.description
+        return render_template(path + 'create.html', form=form)
