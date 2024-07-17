@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import or_, and_
 
 import db_session
+from auth.models import User
 from tasks.forms import CreateTaskForm
 from tasks.models import Task
 
@@ -47,7 +48,9 @@ def show_task(task_id: int):
         and_(or_(current_user.id == Task.creator, current_user.id == Task.assign_to), Task.id == task_id)).first()
     if not task:
         return abort(404)
-    return render_template(path + 'show_task.html', task=task)
+    creator: User = session.query(User).where(task.creator == User.id).first()
+    assign_to: User = session.query(User).where(task.assign_to == User.id).first()
+    return render_template(path + 'show_task.html', task=task, creator=creator, assign_to=assign_to)
 
 
 @blueprint.route('/edit/<task_id>', methods=['GET', 'PUT'])

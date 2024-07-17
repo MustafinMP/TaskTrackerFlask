@@ -11,8 +11,8 @@
 </div>
 <div class="m-5 p-5 mx-auto w-75 bg-light">
     <h1 class="card-title py-2">{{ task.name }}</h1>
-    <p class="card-body pt-2">Создал: {{ task.creator }}</p>
-    <p class="card-body pb-2">Назначена: {{ task.assign_to }}</p>
+    <p class="card-body pt-2">Инициатор: {{ creator.name }}</p>
+    <p class="card-body pb-2">Исполнитель: {{ assign_to.name if assign_to else "Не назначен" }}</p>
     <p class="card-body pt-5">{{ task.description }}</p>
 </div>
 {% endblock %}
