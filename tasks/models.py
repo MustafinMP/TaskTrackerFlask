@@ -11,6 +11,7 @@ class Task(SqlAlchemyBase):
     name: str = Column(String, nullable=False)
     description: str = Column(String, nullable=True)
     creator: int = Column(Integer, ForeignKey('user.id'), nullable=False)
+    assign_to: int = Column(Integer, ForeignKey('user.id'))
     created_date: datetime = Column(TIMESTAMP, default=datetime.now)
     status: int = Column(Integer, ForeignKey('status.id'), default=0, nullable=False)
 

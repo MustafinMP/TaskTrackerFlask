@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from db_session import SqlAlchemyBase
-from sqlalchemy import Column, String, Integer, TIMESTAMP
+from sqlalchemy import Column, String, Integer, TIMESTAMP, LargeBinary
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 

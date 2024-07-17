@@ -22,7 +22,7 @@
             </nav>
             <nav class="navbar">
                 {% if current_user.is_authenticated %}
-                <a href="/profile/{{ current_user.id }}" class="text-light me-5">Профиль</a>
+                <a href="/auth/profile" class="text-light me-5">Профиль</a>
                 {% else %}
                 <a href="/auth/login" class="btn btn-outline-light me-2">Login</a>
                 <a href="/auth/register" class="btn btn-outline-light me-2">Register</a>

@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, abort
 from flask_login import login_required, current_user
+from sqlalchemy import or_, and_
 
 import db_session
 from tasks.forms import CreateTaskForm
@@ -15,7 +16,8 @@ def all_tasks():
     data: list = list()
     if current_user.is_authenticated:
         session = db_session.create_session()
-        data: list = session.query(Task).where(current_user.id == Task.creator).all()
+        data: list = session.query(Task).where(
+            or_(current_user.id == Task.creator, current_user.id == Task.assign_to)).all()
     return render_template(path + 'tasks.html', data=data)
 
 
@@ -41,7 +43,8 @@ def show_task(task_id: int):
     if not current_user.is_authenticated:
         return abort(404)
     session = db_session.create_session()
-    task: Task = session.query(Task).where(current_user.id == Task.creator and Task.id == task_id).first()
+    task: Task = session.query(Task).where(
+        and_(or_(current_user.id == Task.creator, current_user.id == Task.assign_to), Task.id == task_id)).first()
     if not task:
         return abort(404)
     return render_template(path + 'show_task.html', task=task)
