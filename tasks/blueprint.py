@@ -3,9 +3,8 @@ from flask_login import login_required, current_user
 from sqlalchemy import or_, and_
 
 import db_session
-from auth.models import User
-from tasks.forms import CreateTaskForm
-from tasks.models import Task
+from tasks.forms import CreateTaskForm, ChangeStatusForm, get_statuses
+from tasks.models import Task, Status
 
 blueprint = Blueprint('tasks', __name__)
 prefix: str = '/tasks'
@@ -17,8 +16,7 @@ def all_tasks():
     data: list = list()
     if current_user.is_authenticated:
         session = db_session.create_session()
-        data: list = session.query(Task).where(
-            or_(current_user.id == Task.creator, current_user.id == Task.assign_to)).all()
+        data: list = session.query(Task).where(current_user.id == Task.creator_id).all()
     return render_template(path + 'tasks.html', data=data)
 
 
@@ -31,7 +29,7 @@ def add_task():
         task = Task()
         task.name = form.name.data
         task.description = form.description.data
-        task.creator = current_user.get_id()
+        task.creator_id = current_user.get_id()
         session.add(task)
         session.commit()
         return redirect('/tasks')
@@ -43,14 +41,19 @@ def add_task():
 def show_task(task_id: int):
     if not current_user.is_authenticated:
         return abort(404)
-    session = db_session.create_session()
-    task: Task = session.query(Task).where(
-        and_(or_(current_user.id == Task.creator, current_user.id == Task.assign_to), Task.id == task_id)).first()
-    if not task:
-        return abort(404)
-    creator: User = session.query(User).where(task.creator == User.id).first()
-    assign_to: User = session.query(User).where(task.assign_to == User.id).first()
-    return render_template(path + 'show_task.html', task=task, creator=creator, assign_to=assign_to)
+    with db_session.create_session() as session:
+        task: Task = session.query(Task).where(
+            and_(current_user.id == Task.creator_id, Task.id == task_id)).first()
+        if not task:
+            return abort(404)
+        form = ChangeStatusForm(new_status=task.status_id)
+        form.new_status.choices = get_statuses()
+        if request.method == 'POST' and form.validate_on_submit():
+            new_status_id: int = form.new_status.data
+            task.status_id = new_status_id
+            session.commit()
+            return render_template(path + 'show_task.html', task=task, form=form, save=True)
+        return render_template(path + 'show_task.html', task=task, form=form, save=False)
 
 
 @blueprint.route('/edit/<task_id>', methods=['GET', 'PUT'])

@@ -14,12 +14,17 @@
     {% for task in data %}
     <div class="col">
         <a href="/tasks/{{ task.id }}"
-           class="card text-decoration-none mb-3 {{ 'btn-outline-light' if task.status == 0 else 'btn-outline-warning' if task.status == 1 else 'btn-outline-success' }} btn text-start p-0"
-           style="max-width: 18rem;">
-            <h5 class="card-title card-header">{{ task.name }}</h5>
+           class="card text-decoration-none mb-3 btn text-start p-0" style="max-width: 18rem;">
+            <div class="card-title card-header h5">
+                {{ task.name }}
+            </div>
             <div class="card-body">
                 <h6 class="card-text">{{ task.created_date.strftime('%Y-%m-%d') }}</h6>
                 <p class="card-text">{{ task.description }}</p>
+                <div class="card w-50 my-1 p-1 text-center fw-bold
+{{ 'text-dark bg-light' if task.status_id == 0 else 'text-dark bg-warning' if task.status_id == 1 else 'text-white bg-success' }}">
+                    {{ task.status.name }}
+                </div>
             </div>
         </a>
     </div>
