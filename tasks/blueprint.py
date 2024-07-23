@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, abort
+from flask import Blueprint, redirect, render_template, request, abort, jsonify
 from flask_login import login_required, current_user
 from sqlalchemy import or_, and_
 
@@ -66,3 +66,9 @@ def edit_task(task_id: int):  # TODO: put request
         form.name.data = task.name
         form.description.data = task.description
         return render_template(path + 'create.html', form=form)
+
+
+# @blueprint.route('/get')
+# @login_required
+# def get():
+#     return jsonify({'hello': 'world'})

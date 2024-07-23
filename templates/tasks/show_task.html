@@ -36,15 +36,36 @@
 </div>
 <script>
     function Selected(a) {
-	var label = a.value;
-	if (label=={{ form.new_status.data }}) {
-		document.getElementById("SubmitButton").style.display='none';
-		document.getElementById("SaveLabel").style.display='none';
-	} else {
-		document.getElementById("SubmitButton").style.display='block';
-		document.getElementById("SaveLabel").style.display='none';
-	}
+	    var label = a.value;
+        if (label=={{ form.new_status.data }}) {
+	    	document.getElementById("SubmitButton").style.display='none';
+	    	document.getElementById("SaveLabel").style.display='none';
+	    } else {
+	    	document.getElementById("SubmitButton").style.display='block';
+	    	document.getElementById("SaveLabel").style.display='none';
+	    }
 
-}
+    }
 </script>
+<!--<script src="../../static/js/show_task.js"></script>-->
+<!--<script>-->
+
+<!--fetch('http://127.0.0.1:5000/tasks/get')-->
+<!--  .then(response => {-->
+<!--    if (response.ok) {-->
+<!--      return response.json(); // Parse the response data as JSON-->
+<!--    } else {-->
+<!--      throw new Error('API request failed');-->
+<!--    }-->
+<!--  })-->
+<!--  .then(data => {-->
+<!--    // Process the response data here-->
+<!--    console.log(data); // Example: Logging the data to the console-->
+<!--  })-->
+<!--  .catch(error => {-->
+<!--    // Handle any errors here-->
+<!--    console.error(error); // Example: Logging the error to the console-->
+<!--  });-->
+
+<!--</script>-->
 {% endblock %}
