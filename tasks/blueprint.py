@@ -68,7 +68,14 @@ def edit_task(task_id: int):  # TODO: put request
         return render_template(path + 'create.html', form=form)
 
 
-# @blueprint.route('/get')
-# @login_required
-# def get():
-#     return jsonify({'hello': 'world'})
+@blueprint.route('/get')
+@login_required
+def get():
+    with db_session.create_session() as session:
+        tasks: list[Task] = session.query(Task).where(
+            and_(current_user.id == Task.creator_id)).all()
+        return jsonify(
+            {
+                'tasks': [task.to_dict(only=('name', 'creator.name', 'description', 'status')) for task in tasks]
+            }
+        )

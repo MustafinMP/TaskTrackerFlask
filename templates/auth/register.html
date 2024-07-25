@@ -1,7 +1,7 @@
 {% extends "basic_template.html" %}
 
 {% block content %}
-<form action="" method="post" class="mb-3 m-5 mx-auto p-5 w-50 bg-light">
+<form action="" method="post" class="mb-3 m-5 mx-auto p-5 w-50 bg-light" enctype="multipart/form-data">
 <h1>Регистрация</h1>
     {{ form.hidden_tag() }}
     <div>
@@ -40,9 +40,42 @@
             </p>
         {% endfor %}
     </div>
+    <div>
+        {{ form.image.label }}
+        <output id="image-output"></output>
+        {{ form.image(accept="image/*", style="display: none") }}
+        {% for error in form.image.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </div>
+
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
     <br>
     <a href="/auth/login" class="text-dark mt-2">Уже есть аккаунт?</a>
 </form>
+ <script type="text/javascript">
+ if (window.FileReader) {
+ 	document.getElementById('image').addEventListener('change', handleFileSelect, false);
+ 	function handleFileSelect(evt) {
+	var files = evt.target.files;
+	var f = files[0];
+	var reader = new FileReader();
+	reader.onload = (
+		function(theFile) {
+			return function(e) {
+				document.getElementById('image-output').innerHTML = [
+					'<img src="', e.target.result,'" title="', theFile.name, '" width="50" />'
+					].join("");
+			};
+		}
+	)(f);
+	reader.readAsDataURL(f);
+}
+ } else {
+ 	alert('This browser does not support FileReader');
+ }
+ </script>
 {% endblock %}

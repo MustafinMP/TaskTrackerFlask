@@ -1,5 +1,8 @@
+import os
+
 from flask import Blueprint, redirect, render_template
 from flask_login import login_user, logout_user, login_required
+from werkzeug.utils import secure_filename
 
 import db_session
 from auth.forms import LoginForm, RegisterForm
@@ -29,6 +32,9 @@ def register():
                 form=form,
                 message="Такой пользователь уже есть"
             )
+        file = form.image.data
+        filename = secure_filename(file.filename)
+        file.save(os.path.join('data/uploads', filename))
         user = User(
             name=form.name.data,
             email=form.email.data

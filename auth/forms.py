@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms.fields.simple import EmailField, PasswordField, BooleanField, SubmitField, StringField
+from flask_wtf.file import FileRequired, FileAllowed
+from wtforms.fields.simple import EmailField, PasswordField, BooleanField, SubmitField, StringField, FileField
 from wtforms.validators import DataRequired
 
 
@@ -8,6 +9,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
     name = StringField('Имя пользователя', validators=[DataRequired()])
+    image = FileField('Загрузить изображение', validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
     submit = SubmitField('Войти')
 
 

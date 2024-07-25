@@ -1,5 +1,17 @@
 {% extends "basic_template.html" %}
 
 {% block content %}
-{{ current_user.name }}
+<div class="w-75 mx-auto my-5 bg-light">
+    <div class="text-center">
+        <img src="{% if current_user.image %}
+                ../static/uploads/{{ current_user.image }}
+                {% else %}
+                ../static/img/default.png
+                {% endif %}"
+                     style="width: 240px; height: 240px; border-radius: 50%; background-size: cover;"
+                class="mx-auto my-4"/>
+    </div>
+
+</div>
+
 {% endblock %}

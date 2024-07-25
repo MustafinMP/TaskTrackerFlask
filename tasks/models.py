@@ -1,11 +1,12 @@
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, orm
+from sqlalchemy_serializer import SerializerMixin
 
 from db_session import SqlAlchemyBase
 
 
-class Task(SqlAlchemyBase):
+class Task(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'task'
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     name: str = Column(String, nullable=False)
@@ -18,7 +19,7 @@ class Task(SqlAlchemyBase):
     status = orm.relationship('Status', foreign_keys=[status_id])
 
 
-class Status(SqlAlchemyBase):
+class Status(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'status'
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     name: str = Column(String(length=50), nullable=False)
