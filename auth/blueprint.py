@@ -1,12 +1,13 @@
 import os
 
 from flask import Blueprint, redirect, render_template
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 
 import db_session
 from auth.forms import LoginForm, RegisterForm
 from auth.models import User
+from tasks.models import Task, Status
 
 blueprint = Blueprint('auth', __name__)
 prefix = '/auth'
@@ -73,4 +74,19 @@ def logout():
 @blueprint.route('/profile')
 @login_required
 def profile():
+    with db_session.create_session() as session:
+        tasks: list[Task] = session.query(Task).where(current_user.id == Task.creator_id).all()
+        statuses: list[Status] = session.query(Status).all()
+        tasks_count: dict[str, int] = {
+            status.name: 0
+            for status in statuses
+        }
+        for task in tasks:
+            tasks_count[task.status.name] += 1
+    return render_template(path + 'profile.html', tasks_count=tasks_count)
+
+
+@blueprint.route('/profile/edit')
+@login_required
+def edit_profile():
     return render_template(path + 'profile.html')
