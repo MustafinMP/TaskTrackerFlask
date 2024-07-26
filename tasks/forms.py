@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields.simple import StringField, SubmitField, TextAreaField
 from wtforms.fields import SelectField
-from wtforms.form import BaseForm
 from wtforms.validators import DataRequired
 
 import db_session
@@ -22,3 +21,9 @@ def get_statuses() -> list[Status]:
 class ChangeStatusForm(FlaskForm):
     new_status: SelectField = SelectField('Статус задачи')
     submit = SubmitField('Сохранить')
+
+
+class CreateBasketForm(FlaskForm):
+    name = StringField('Название', validators=[DataRequired()])
+    description = TextAreaField('Описание корзинки', validators=[DataRequired()])
+    submit = SubmitField('Создать')

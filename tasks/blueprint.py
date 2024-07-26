@@ -1,10 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, abort, jsonify
 from flask_login import login_required, current_user
-from sqlalchemy import or_, and_
+from sqlalchemy import and_
 
 import db_session
 from tasks.forms import CreateTaskForm, ChangeStatusForm, get_statuses
-from tasks.models import Task, Status
+from tasks.models import Task
 
 blueprint = Blueprint('tasks', __name__)
 prefix: str = '/tasks'
@@ -33,7 +33,7 @@ def add_task():
         session.add(task)
         session.commit()
         return redirect('/tasks')
-    return render_template(path + 'create.html', form=form)
+    return render_template(path + 'create.html', form=form, title='Добавить задачу')
 
 
 @blueprint.route('/<int:task_id>', methods=['GET', 'POST'])
@@ -65,7 +65,7 @@ def edit_task(task_id: int):  # TODO: put request
         task: Task = session.query(Task).where(Task.id == task_id).first()
         form.name.data = task.name
         form.description.data = task.description
-        return render_template(path + 'create.html', form=form)
+        return render_template(path + 'create.html', form=form, title='Изменить задачу')
 
 
 @blueprint.route('/get')
