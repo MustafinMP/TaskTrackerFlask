@@ -94,6 +94,13 @@
     </div>
 </header>
 <main style="min-height: 800px">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+    </nav>
     {% block content %}{% endblock %}
 </main>
 <!--<footer class="site-footer bg-primary" style="min-height: 200px">-->

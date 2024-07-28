@@ -21,7 +21,7 @@ def global_init():
     __factory = orm.sessionmaker(bind=engine)
 
     from auth.models import User
-    from tasks.models import Task
+    from tasks.models import Task, Status
     SqlAlchemyBase.metadata.create_all(engine)
 
 
