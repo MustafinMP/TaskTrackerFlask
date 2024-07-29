@@ -11,7 +11,6 @@ from tasks.models import Task, Status
 
 blueprint = Blueprint('auth', __name__)
 prefix = '/auth'
-path = prefix + '/'
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])
@@ -44,7 +43,7 @@ def register():
         db_sess.add(user)
         db_sess.commit()
         return redirect(prefix + '/login')
-    return render_template(path + 'register.html', title='Регистрация', form=form)
+    return render_template(prefix + '/register.html', title='Регистрация', form=form)
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])
@@ -55,13 +54,9 @@ def login():
         user: User = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
-        return render_template(
-            path + 'login.html',
-            message="Неправильный логин или пароль",
-            form=form
-        )
-    return render_template(prefix + '/' + 'login.html', title='Авторизация', form=form)
+            return redirect("/tasks")
+        return render_template(prefix + '/login.html', message="Неправильный логин или пароль", form=form)
+    return render_template(prefix + '/login.html', title='Авторизация', form=form)
 
 
 @blueprint.route('/logout')

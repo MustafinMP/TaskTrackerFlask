@@ -12,7 +12,7 @@ path: str = prefix + '/'
 
 
 @blueprint.route('/')
-def all_tasks():
+def tasks():
     data: list = list()
     if current_user.is_authenticated:
         session = db_session.create_session()
