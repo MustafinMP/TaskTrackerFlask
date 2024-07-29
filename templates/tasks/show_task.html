@@ -14,8 +14,8 @@
     <p class="card-body py-2">Автор: {{ task.creator.name }}</p>
     <p class="card-body py-5">{{ task.description }}</p>
     <form action="" method="post" class="mb-3 w-75 bg-light needs-validation" novalidate>
-        {{ form.new_status.label(class="d-block mb-2") }}
         {{ form.csrf_token }}
+        {{ form.new_status.label(class="d-block mb-2") }}
         <div class="d-inline-block align-text-top">
             {{ form.new_status(class="form-select", onChange="Selected(this)") }}<br>
             {% for error in form.new_status.errors %}

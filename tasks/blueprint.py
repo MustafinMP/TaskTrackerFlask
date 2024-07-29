@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import and_
 
 import db_session
-from tasks.forms import CreateTaskForm, ChangeStatusForm, get_statuses
+from tasks.forms import CreateTaskForm, ChangeStatusForm, get_statuses, EditTaskForm
 from tasks.models import Task
 
 blueprint = Blueprint('tasks', __name__)
@@ -56,16 +56,25 @@ def show_task(task_id: int):
         return render_template(path + 'show_task.html', task=task, form=form, save=False)
 
 
-@blueprint.route('/edit/<task_id>', methods=['GET', 'PUT'])
+@blueprint.route('/edit/<task_id>', methods=['GET', 'POST'])
 @login_required
-def edit_task(task_id: int):  # TODO: put request
-    if request.method == 'GET':
-        form = CreateTaskForm()
-        session = db_session.create_session()
+def edit_task(task_id: int):
+    with db_session.create_session() as session:
         task: Task = session.query(Task).where(Task.id == task_id).first()
-        form.name.data = task.name
-        form.description.data = task.description
-        return render_template(path + 'create.html', form=form, title='Изменить задачу')
+        form = EditTaskForm(new_status=task.status_id)
+        form.new_status.choices = get_statuses()
+        if request.method == 'GET':
+            form.name.data = task.name
+            form.description.data = task.description
+            return render_template(path + 'edit.html', form=form, title='Изменить задачу')
+        if request.method == 'POST':
+            if form.validate_on_submit:
+                task: Task = session.query(Task).where(Task.id == task_id).first()
+                task.name = form.name.data
+                task.description = form.description.data
+                task.status_id = form.new_status.data
+                session.commit()
+                return redirect(f'/tasks/{task_id}')
 
 
 @blueprint.route('/get')

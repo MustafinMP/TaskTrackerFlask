@@ -13,17 +13,15 @@ class CreateTaskForm(FlaskForm):
     submit = SubmitField('Создать')
 
 
-def get_statuses() -> list[Status]:
-    session = db_session.create_session()
-    return [(status.id, status.name) for status in session.query(Status).all()]
-
-
 class ChangeStatusForm(FlaskForm):
     new_status: SelectField = SelectField('Статус задачи')
     submit = SubmitField('Сохранить')
 
 
-class CreateBasketForm(FlaskForm):
-    name = StringField('Название', validators=[DataRequired()])
-    description = TextAreaField('Описание корзинки', validators=[DataRequired()])
-    submit = SubmitField('Создать')
+class EditTaskForm(CreateTaskForm, ChangeStatusForm):
+    ...
+
+
+def get_statuses() -> list[Status]:
+    session = db_session.create_session()
+    return [(status.id, status.name) for status in session.query(Status).all()]
