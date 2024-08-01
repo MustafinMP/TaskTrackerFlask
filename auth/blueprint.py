@@ -35,10 +35,9 @@ def register():
         file = form.image.data
         filename = secure_filename(file.filename)
         file.save(os.path.join('data/uploads', filename))
-        user = User(
-            name=form.name.data,
-            email=form.email.data
-        )
+        user = User()
+        user.name = form.name.data
+        user.email = form.email.data
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
@@ -72,16 +71,13 @@ def profile():
     with db_session.create_session() as session:
         tasks: list[Task] = session.query(Task).where(current_user.id == Task.creator_id).all()
         statuses: list[Status] = session.query(Status).all()
-        tasks_count: dict[str, int] = {
-            status.name: 0
-            for status in statuses
-        }
+        tasks_count: dict[str, int] = {status.name: 0 for status in statuses}
         for task in tasks:
             tasks_count[task.status.name] += 1
-    return render_template(path + 'profile.html', tasks_count=tasks_count)
+    return render_template(prefix + '/profile.html', tasks_count=tasks_count)
 
 
 @blueprint.route('/profile/edit')
 @login_required
 def edit_profile():
-    return render_template(path + 'profile.html')
+    return render_template(prefix + '/profile.html')
