@@ -1,0 +1,41 @@
+{% extends "basic_template.html" %}
+
+{% block content %}
+
+<div class="navbar w-75 mx-auto mt-5">
+    <div class="container">
+        <nav class="navbar">
+            <h1 class="me-5">Мои задачи</h1>
+            <a href="/tasks/create" class="btn btn-primary btn-lg">Добавить</a>
+        </nav>
+    </div>
+</div>
+{% if current_user.is_authenticated %}
+{% for status in statuses %}
+<div class="m-5 mx-auto w-75 bg-light">
+    <h1 class="m-2">{{ status.name }}</h1>
+    <div class="row row-cols-1 row-cols-md-5 g-4 m-2">
+        {% for task in tasks_by_statuses[status.id] %}
+        <div class="col">
+            <a href="/tasks/{{ task.id }}"
+               class="card text-decoration-none mb-3 btn text-start p-0" style="max-width: 18rem;">
+                <div class="card-title card-header h5">
+                    {{ task.name }}
+                </div>
+                <div class="card-body">
+                    <h6 class="card-text">{{ task.created_date.strftime('%Y-%m-%d') }}</h6>
+                    <p class="card-text">{{ task.description }}</p>
+                    <div class="card w-50 my-1 p-1 text-center fw-bold
+{{ 'text-dark bg-light' if task.status_id == 0 else 'text-dark bg-warning' if task.status_id == 1 else 'text-white bg-success' }}">
+                        {{ task.status.name }}
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endfor %}
+{% endif %}
+{% endblock %}
