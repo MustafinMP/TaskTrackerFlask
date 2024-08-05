@@ -12,7 +12,7 @@
 </div>
 {% if current_user.is_authenticated %}
 {% for status in statuses %}
-<div class="m-5 mx-auto w-75 bg-light">
+<div class="m-5 mx-auto w-75" style="background-color: {{ status.color_tag }}">
     <h1 class="m-2">{{ status.name }}</h1>
     <div class="row row-cols-1 row-cols-md-5 g-4 m-2">
         {% for task in tasks_by_statuses[status.id] %}

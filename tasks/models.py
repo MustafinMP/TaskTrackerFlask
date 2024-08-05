@@ -1,9 +1,20 @@
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, orm
+from sqlalchemy.orm import validates
 from sqlalchemy_serializer import SerializerMixin
 
 from db_session import SqlAlchemyBase
+
+
+color_tags: tuple[str] = tuple(
+    [
+        'grey',
+        'red',
+        'orange',
+        'green',
+    ]
+)
 
 
 class Task(SqlAlchemyBase, SerializerMixin):
@@ -23,4 +34,12 @@ class Status(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'status'
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     name: str = Column(String(length=50), nullable=False)
-    # color_tag: str = Column(String(length=20), default='')
+    color_tag: str = Column(String(length=30), nullable=True, default=color_tags[0])
+
+    @validates('color_tag')
+    def validate_color_tag(self, key, value):
+        if value not in color_tags:
+            raise ValueError("Color tag doesn't exist")
+        return value
+
+
