@@ -26,6 +26,7 @@ def tasks2():
     if current_user.is_authenticated:
         with db_session.create_session() as session:
             statuses: list[Status] = session.scalars(select(Status)).all()
+            statuses.sort(key=lambda status: status.id)
             tasks_by_statuses: dict[int, list[Task | None]] = {
                 status.id: session.scalars(
                     select(Task).where(

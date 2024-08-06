@@ -1,0 +1,59 @@
+:root {
+  --custom-red: #dc3545;
+  --custom-orange: #ffc107;
+  --custom-green: #198754;
+  --custom-dark: #212529;
+  --custom-light: #e8e9ea;
+  --custom-white: #f8f9fa;
+}
+
+.red-theme-light {
+  border: 2px solid var(--custom-red);
+  color: var(--custom-dark) !important;
+}
+
+.orange-theme-light {
+  border: 2px solid var(--custom-orange);
+  color: var(--custom-dark) !important;
+}
+
+.green-theme-light {
+  border: 2px solid var(--custom-green);
+  color: var(--custom-dark) !important;
+}
+
+.grey-theme-light {
+  border: 2px solid var(--custom-light);
+  color: var(--custom-dark) !important;
+}
+
+.red-theme-filled {
+  background: var(--custom-red);
+  color: var(--custom-dark) !important;
+}
+
+.orange-theme-filled {
+  background: var(--custom-orange);
+  color: var(--custom-dark) !important;
+}
+
+.green-theme-filled {
+  background: var(--custom-green);
+  color: var(--custom-light) !important;
+}
+
+.grey-theme-filled {
+  background: var(--custom-light);
+  color: var(--custom-dark) !important;
+}
+
+.custom-card-light {
+  display: block;
+  overflow: hidden;
+  width: 90%;
+  aspect-ratio: 2/1;
+  background: var(--custom-white);
+  border: 1px solid var(--custom-light);
+  text-decoration: none;
+  color: var(--custom-dark) !important;
+}

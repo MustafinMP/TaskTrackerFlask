@@ -11,31 +11,23 @@
     </div>
 </div>
 {% if current_user.is_authenticated %}
-{% for status in statuses %}
-<div class="m-5 mx-auto w-75" style="background-color: {{ status.color_tag }}">
-    <h1 class="m-2">{{ status.name }}</h1>
-    <div class="row row-cols-1 row-cols-md-5 g-4 m-2">
-        {% for task in tasks_by_statuses[status.id] %}
-        <div class="col">
+<div class="row w-75 mx-auto p-4 justify-content-center">
+    {% for status in statuses %}
+    <div class="col m-3 p-0" style="min-width: 16rem; max-width: 24rem;">
+        <h3 class="px-2 py-3 {{ status.color_tag }}-theme-filled">{{ status.name }}</h3>
+        <div class="{{ status.color_tag }}-theme-filled py-2">
+            {% for task in tasks_by_statuses[status.id] %}
             <a href="/tasks/{{ task.id }}"
-               class="card text-decoration-none mb-3 btn text-start p-0" style="max-width: 18rem;">
-                <div class="card-title card-header h5">
-                    {{ task.name }}
-                </div>
-                <div class="card-body">
-                    <h6 class="card-text">{{ task.created_date.strftime('%Y-%m-%d') }}</h6>
-                    <p class="card-text">{{ task.description }}</p>
-                    <div class="card w-50 my-1 p-1 text-center fw-bold
-{{ 'text-dark bg-light' if task.status_id == 0 else 'text-dark bg-warning' if task.status_id == 1 else 'text-white bg-success' }}">
-                        {{ task.status.name }}
-                    </div>
-                </div>
+               class="custom-card-light my-3 mx-auto p-0 text-decoration-none text-dark text-start">
+                <div class="card-title h5 ms-3 mt-2">{{ task.name }}</div>
+                <p class="ms-3 mt-1 h-50" style="font-size: 1rem">{{ task.description }}</p>
+                <div class="h6 ms-3 mt-1 text-secondary">{{ task.created_date.strftime('%Y-%m-%d') }}</div>
             </a>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-</div>
 
-{% endfor %}
+    </div>
+    {% endfor %}
+</div>
 {% endif %}
 {% endblock %}
