@@ -13,103 +13,12 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/color_themes.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='/css/geometry.css') }}">
 </head>
-<body>
-<header class="bg-primary">
-    <div class="navbar">
-        <div class="container-fluid">
-            <a href="/" class="m-2"><img src="{{ url_for('static', filename='/img/HTrackerLogoHorizontal.png') }}"
-                                         alt="HTracker"
-                                         style="width: 90px; height: 45px"/></a>
-            <nav class="navbar">
-                <a href="/tasks" class="btn text-light me-2">My tasks</a>
-            </nav>
-            <nav class="navbar">
-                {% if current_user.is_authenticated %}
-                <a type="button" data-bs-toggle="offcanvas"
-                   data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                    <img src="{% if current_user.image %}
-                        {{ url_for('static', filename='/uploads/') }}{{ current_user.image }}
-                        {% else %} {{ url_for('static', filename='/img/default.png') }}
-                        {% endif %}"
-                         style="width: 45px; height: 45px; border-radius: 50%; background-size: cover;"
-                         class="me-2"/>
-                </a>
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                     aria-labelledby="offcanvasRightLabel">
-
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="offcanvas-header">
-                                <img src="{% if current_user.image %}
-                                    {{ url_for('static', filename='/uploads/') }}{{ current_user.image }}
-                                    {% else %} {{ url_for('static', filename='/img/default.png') }}
-                                    {% endif %}"
-                                     style="width: 45px; height: 45px; border-radius: 50%; background-size: cover;"
-                                     class="me-4"/>
-                                <h5 class="offcanvas-title" id="offcanvasRightLabel">{{ current_user.name }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                        aria-label="Закрыть"></button>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="offcanvas-body container">
-                                <a href="{{ url_for('auth.profile') }}"
-                                   class="row link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover w-50 my-3"
-                                   style="font-size: 1.1rem py-auto">
-                                    <i class="bi bi-person-circle col-1"></i>
-                                    <div class="col-2">
-                                        Profile
-                                    </div>
-                                </a>
-                                <a href="{{ url_for('index') }}"
-                                   class="row link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover w-50 my-3"
-                                   style="font-size: 1.1rem py-auto">
-                                    <i class="bi bi-house col-1"></i>
-                                    <div class="col-2">
-                                        Home
-                                    </div>
-                                </a>
-                                <a href="{{ url_for('tasks.tasks') }}"
-                                   class="row link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover w-50 my-3"
-                                   style="font-size: 1.1rem py-auto">
-                                    <i class="bi bi-list-task col-1"></i>
-                                    <div class="col-2">
-                                        Tasks
-                                    </div>
-                                </a>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="offcanvas-body container">
-                                <a href="{{ url_for('auth.logout') }}"
-                                   class="row link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover w-50 my-3"
-                                   style="font-size: 1.1rem py-auto">
-                                    <i class="bi bi-box-arrow-left col-1"></i>
-                                    <div class="col-2">
-                                        Logout
-                                    </div>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                {% else %}
-                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2">Login</a>
-                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light me-2">Register</a>
-                {% endif %}
-            </nav>
-        </div>
-    </div>
-</header>
-<main style="min-height: 800px">
+<body class="row w-100 m-0">
+{% include 'header.html' %}
+{% if current_user.is_authenticated %}{% include 'navbar.html' %}{% endif %}
+<main class="{% if current_user.is_authenticated %}col-10{% endif %} m-0 p-0" style="border-left: 2px solid #e8e9ea;">
     {% block content %}{% endblock %}
 </main>
-<!--<footer class="site-footer bg-primary" style="min-height: 200px">-->
-<!--    <div class="container">-->
-<!--        <p>© Мустафин М. П., 2024</p>-->
-<!--    </div>-->
-<!--</footer>-->
 </body>
 </html>

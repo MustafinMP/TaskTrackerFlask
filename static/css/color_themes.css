@@ -49,10 +49,9 @@
 
 .custom-card-light {
   display: block;
-  overflow: hidden;
   width: 90%;
   aspect-ratio: 2/1;
-  background: var(--custom-white);
+  background: white;
   border: 1px solid var(--custom-light);
   text-decoration: none;
   color: var(--custom-dark) !important;

@@ -22,12 +22,12 @@ def tasks():
 
 
 @blueprint.route('/tasks_by_statuses')
-def tasks2():
+def tasks_by_statuses():
     if current_user.is_authenticated:
         with db_session.create_session() as session:
             statuses: list[Status] = session.scalars(select(Status)).all()
             statuses.sort(key=lambda status: status.id)
-            tasks_by_statuses: dict[int, list[Task | None]] = {
+            tasks_: dict[int, list[Task | None]] = {
                 status.id: session.scalars(
                     select(Task).where(
                         and_(
@@ -40,7 +40,7 @@ def tasks2():
             }
             return render_template(prefix + '/tasks_by_statuses.html',
                                    statuses=statuses,
-                                   tasks_by_statuses=tasks_by_statuses)
+                                   tasks_by_statuses=tasks_)
     return redirect('/')
 
 
