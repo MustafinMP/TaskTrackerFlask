@@ -12,16 +12,6 @@ prefix: str = '/tasks'
 
 
 @blueprint.route('/')
-def tasks():
-    all_tasks: list = list()
-    if current_user.is_authenticated:
-        session = db_session.create_session()
-        all_tasks: list = session.query(Task).where(current_user.id == Task.creator_id).all()
-        return render_template(prefix + '/tasks.html', tasks=all_tasks)
-    return redirect('/')
-
-
-@blueprint.route('/tasks_by_statuses')
 def tasks_by_statuses():
     if current_user.is_authenticated:
         with db_session.create_session() as session:
