@@ -18,8 +18,8 @@ HOST = 'localhost' if LOCAL else '192.168.0.13'
 
 @login_manager.user_loader
 def load_user(user_id):
-    db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
+    with db_session.create_session() as db_sess:
+        return db_sess.get(User, user_id)
 
 
 app.register_blueprint(blueprint_auth, url_prefix=prefix_auth)

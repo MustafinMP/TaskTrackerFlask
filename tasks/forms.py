@@ -18,6 +18,11 @@ class ChangeStatusForm(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
+class CreateTagForm(FlaskForm):
+    name = StringField('Тег', validators=[DataRequired()])
+    submit = SubmitField('Создать')
+
+
 def create_change_status_form(task: Task):
     form = ChangeStatusForm(new_status=task.status_id)
     form.new_status.choices = get_statuses()
