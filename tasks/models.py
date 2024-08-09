@@ -1,11 +1,10 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, orm
+from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, orm, Table
 from sqlalchemy.orm import validates
 from sqlalchemy_serializer import SerializerMixin
 
 from db_session import SqlAlchemyBase
-
 
 color_tags: tuple[str] = tuple(
     [
@@ -43,3 +42,15 @@ class Status(SqlAlchemyBase, SerializerMixin):
         return value
 
 
+class Tag(SqlAlchemyBase, SerializerMixin):
+    __tablename__ = 'tag'
+    id: int = Column(Integer, primary_key=True, autoincrement=True)
+    name: str = Column(String(length=50), nullable=False)
+    tasks = orm.relationship('Task', secondary='task_to_tag', backref='tags')
+
+
+task_to_tag = Table(
+    'task_to_tag', SqlAlchemyBase.metadata,
+    Column('task', Integer, ForeignKey('task.id')),
+    Column('tag', Integer, ForeignKey('tag.id'))
+)
