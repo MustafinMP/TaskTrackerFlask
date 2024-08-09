@@ -46,7 +46,7 @@ def tasks_by_statuses():
 
 @blueprint.route('/create', methods=['GET', 'POST'])
 @login_required
-def add_task():
+def create_task():
     form = CreateTaskForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -54,6 +54,8 @@ def add_task():
         task.name = form.name.data
         task.description = form.description.data
         task.creator_id = current_user.get_id()
+        if (status := request.args.get('status', None)) is not None:
+            task.status_id = status
         session.add(task)
         session.commit()
         return redirect('/tasks')
@@ -68,7 +70,7 @@ def show_task(task_id: int):
     with db_session.create_session() as session:
         task: Task = session.query(Task).where(
             and_(current_user.id == Task.creator_id, Task.id == task_id)).first()
-        if not task:
+        if not task or task.creator_id != current_user.id:
             return abort(404)
         form: ChangeStatusForm = create_change_status_form(task)
         if request.method == 'POST' and form.validate_on_submit():
@@ -79,11 +81,13 @@ def show_task(task_id: int):
         return render_template(prefix + '/show_task.html', task=task, form=form, save=False)
 
 
-@blueprint.route('/edit/<task_id>', methods=['GET', 'POST'])
+@blueprint.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def edit_task(task_id: int):
     with db_session.create_session() as session:
         task: Task = session.query(Task).where(Task.id == task_id).first()
+        if not task or task.creator_id != current_user.id:
+            return abort(404)
         form: EditTaskForm = create_edit_task_form(task)
         if request.method == 'GET':
             form.name.data = task.name
@@ -96,6 +100,18 @@ def edit_task(task_id: int):
             task.status_id = form.new_status.data
             session.commit()
             return redirect(f'/tasks/{task_id}')
+
+
+@blueprint.route('/delete/<int:task_id>')
+@login_required
+def delete_task(task_id: int):
+    with db_session.create_session() as session:
+        task: Task = session.query(Task).where(Task.id == task_id).first()
+        if not task or task.creator_id != current_user.id:
+            return abort(404)
+        session.delete(task)
+        session.commit()
+        return redirect('/tasks')
 
 
 @blueprint.route('/get')

@@ -12,6 +12,9 @@ app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+LOCAL = False
+HOST = 'localhost' if LOCAL else '192.168.0.13'
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -30,7 +33,8 @@ def index():
 
 def main():
     db_session.global_init()
-    app.run()
+    print('Запуск сервера')
+    app.run(host=HOST)
 
 
 if __name__ == '__main__':

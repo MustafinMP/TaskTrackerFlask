@@ -2,16 +2,16 @@
 
 {% block content %}
 
-<div class="navbar w-75 mx-auto mt-5">
+<div class="navbar w-75 ms-5 mt-5">
     <div class="container">
         <nav class="navbar">
             <h1 class="me-5">Мои задачи</h1>
-            <a href="/tasks/create" class="btn btn-primary btn-lg">Добавить</a>
+            <a href="{{ url_for('tasks.create_task') }}" class="btn btn-primary btn-lg">Добавить</a>
         </nav>
     </div>
 </div>
 {% if current_user.is_authenticated %}
-<div class="row w-75 mx-auto p-4 justify-content-center">
+<div class="row w-75 ms-5 p-4">
     {% for status in statuses %}
     <div class="col m-3 p-0" style="min-width: 16rem; max-width: 24rem;">
         <h3 class="px-2 py-3 {{ status.color_tag }}-theme-filled">{{ status.name }}</h3>
@@ -20,14 +20,21 @@
             <a href="/tasks/{{ task.id }}"
                class="custom-card-light my-3 mx-auto p-0 text-decoration-none text-dark text-start">
                 <div class="card-title h5 ms-3 mt-2">{{ task.name }}</div>
-                <p class="ms-3 mt-1 h-50" style="font-size: 1rem">{{ task.description }}</p>
+                <p class="mx-3 mt-1 h-50 max-three-lines" style="font-size: 1rem;">{{ task.description }}</p>
                 <div class="h6 ms-3 mt-1 text-secondary">{{ task.created_date.strftime('%d.%m.%Y') }}</div>
             </a>
             {% endfor %}
         </div>
+        <a href="{{ url_for('tasks.create_task') }}?status={{ status.id }}"
+           class="bg-light my-3 px-auto py-3 text-decoration-none text-center text-dark"
+           style="display: block">
+            <div class="me-2 d-inline">Create task</div>
+            <i class="bi bi-plus-circle"></i>
 
+        </a>
     </div>
     {% endfor %}
 </div>
 {% endif %}
+
 {% endblock %}

@@ -4,8 +4,9 @@
 <div class="navbar m-5 mx-auto w-75">
     <div class="container">
         <nav class="navbar">
-            <a href="/tasks" class="btn btn-outline-secondary btn-lg me-4">Вернуться</a>
-            <a href="/tasks/edit/{{ task.id }}" class="btn btn-primary btn-lg">Изменить</a>
+            <a href="{{ url_for('tasks.tasks_by_statuses') }}" class="btn btn-outline-secondary btn-lg me-4">Вернуться</a>
+            <a href="/tasks/edit/{{ task.id }}" class="btn btn-primary btn-lg me-4">Изменить</a>
+            <a href="/tasks/delete/{{ task.id }}" class="btn btn-outline-danger btn-lg">Удалить</a>
         </nav>
     </div>
 </div>

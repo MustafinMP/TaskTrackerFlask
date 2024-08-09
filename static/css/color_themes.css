@@ -56,3 +56,10 @@
   text-decoration: none;
   color: var(--custom-dark) !important;
 }
+
+.max-three-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
