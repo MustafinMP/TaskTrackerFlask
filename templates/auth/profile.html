@@ -1,6 +1,7 @@
 {% extends "basic_template.html" %}
 
 {% block content %}
+{% include 'navbar.html' %}
 <div class="w-75 mx-auto my-5 bg-light">
     <div class="text-center mb-5">
         <img src="{% if current_user.image %}

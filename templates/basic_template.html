@@ -16,7 +16,7 @@
 </head>
 <body class="row w-100 m-0">
 {% include 'header.html' %}
-{% if current_user.is_authenticated %}{% include 'navbar.html' %}{% endif %}
+{% block navbar %}{% endblock %}
 <main class="{% if current_user.is_authenticated %}col-10{% endif %} m-0 p-0" style="border-left: 2px solid #e8e9ea;">
     {% block content %}{% endblock %}
 </main>
