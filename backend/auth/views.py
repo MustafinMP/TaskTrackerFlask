@@ -34,7 +34,7 @@ def register():
             )
         file = form.image.data
         filename = secure_filename(file.filename)
-        file.save(os.path.join('data/uploads', filename))
+        file.save(os.path.join('../static/uploads', filename))
         user = User()
         user.name = form.name.data
         user.email = form.email.data
