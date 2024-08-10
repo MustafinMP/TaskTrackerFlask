@@ -1,10 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, abort, jsonify
 from flask_login import login_required, current_user
-from sqlalchemy import and_, select, union_all
+from sqlalchemy import and_, select
 
 import db_session
-from tasks.forms import CreateTaskForm, ChangeStatusForm, EditTaskForm, create_change_status_form, \
-    create_edit_task_form, get_statuses
+from backend.tasks.forms import CreateTaskForm, ChangeStatusForm, EditTaskForm, create_change_status_form, \
+    create_edit_task_form
 from tasks.models import Task, Status
 
 blueprint = Blueprint('tasks', __name__)
@@ -59,8 +59,8 @@ def show_task(task_id: int):
         return abort(404)
     with db_session.create_session() as session:
         task: Task = session.query(Task).where(
-            and_(current_user.id == Task.creator_id, Task.id == task_id)).first()
-        if not task or task.creator_id != current_user.id:
+            and_(current_user.id == Task.creator_id, Task.id == task_id)).one_or_none()
+        if task is None or task.creator_id != current_user.id:
             return abort(404)
         form: ChangeStatusForm = create_change_status_form(task)
         if request.method == 'POST' and form.validate_on_submit():
@@ -75,8 +75,8 @@ def show_task(task_id: int):
 @login_required
 def edit_task(task_id: int):
     with db_session.create_session() as session:
-        task: Task = session.query(Task).where(Task.id == task_id).first()
-        if not task or task.creator_id != current_user.id:
+        task: Task = session.query(Task).where(Task.id == task_id).one_or_none()
+        if task is None or task.creator_id != current_user.id:
             return abort(404)
         form: EditTaskForm = create_edit_task_form(task)
         if request.method == 'GET':
@@ -96,8 +96,8 @@ def edit_task(task_id: int):
 @login_required
 def delete_task(task_id: int):
     with db_session.create_session() as session:
-        task: Task = session.query(Task).where(Task.id == task_id).first()
-        if not task or task.creator_id != current_user.id:
+        task: Task = session.query(Task).where(Task.id == task_id).one_or_none()
+        if task is None or task.creator_id != current_user.id:
             return abort(404)
         session.delete(task)
         session.commit()
