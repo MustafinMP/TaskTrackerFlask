@@ -1,26 +1,9 @@
 from flask_login import current_user
-from sqlalchemy import select, and_, Select
+from sqlalchemy import select, and_, Select, delete, update
+from sqlalchemy.orm import joinedload
 
 import db_session
 from tasks.models import Status, Task
-
-
-def stmt_task_by_id(task_id: int) -> Select:
-    return select(Task).where(
-        and_(
-            current_user.id == Task.creator_id,
-            Task.id == task_id
-        )
-    )
-
-
-def stmt_task_by_status_id(status_id: int) -> Select:
-    return select(Task).where(
-        and_(
-            current_user.id == Task.creator_id,
-            Task.status_id == status_id
-        )
-    )
 
 
 def select_all_statuses() -> list[Status, ...]:
@@ -29,7 +12,7 @@ def select_all_statuses() -> list[Status, ...]:
         return session.scalars(stmt).all()
 
 
-def create_task(name: str, description: str, status_id=None) -> None:
+def create_task(name: str, description: str, status_id: int | None = None) -> None:
     with db_session.create_session() as session:
         task = Task()
         task.name = name
@@ -43,37 +26,61 @@ def create_task(name: str, description: str, status_id=None) -> None:
 
 def select_task_by_status(status_id: int) -> list[Task, ...]:
     with db_session.create_session() as session:
-        stmt = stmt_task_by_status_id(status_id)
+        stmt = select(Task).where(
+            and_(
+                current_user.id == Task.creator_id,
+                Task.status_id == status_id
+            )
+        )
         return session.scalars(stmt).all()
 
 
 def select_task_by_id(task_id: int) -> Task | None:
     with db_session.create_session() as session:
-        stmt = stmt_task_by_id(task_id)
+        stmt = select(Task).where(
+            and_(
+                current_user.id == Task.creator_id,
+                Task.id == task_id
+            )
+        ).options(joinedload(Task.creator))
         return session.scalar(stmt)
 
 
 def update_task_status(task_id: int, new_status_id: int) -> None:
     with db_session.create_session() as session:
-        stmt = stmt_task_by_id(task_id)
-        task: Task = session.scalar(stmt)
-        task.status_id = new_status_id
+        stmt = update(Task).where(
+            and_(
+                current_user.id == Task.creator_id,
+                Task.id == task_id
+            )
+        ).values(status_id=new_status_id)
+        session.execute(stmt)
         session.commit()
 
 
 def update_task(task_id: int, new_name, new_description, new_status_id) -> None:
     with db_session.create_session() as session:
-        stmt = stmt_task_by_id(task_id)
-        task: Task = session.scalar(stmt)
-        task.name = new_name
-        task.description = new_description
-        task.status_id = new_status_id
+        stmt = update(Task).where(
+            and_(
+                current_user.id == Task.creator_id,
+                Task.id == task_id
+            )
+        ).values(
+            name=new_name,
+            description=new_description,
+            status_id=new_status_id
+        )
+        session.execute(stmt)
         session.commit()
 
 
 def delete_task(task_id) -> None:
     with db_session.create_session() as session:
-        stmt = stmt_task_by_id(task_id)
-        task: Task = session.scalar(stmt)
-        session.delete(task)
+        stmt = delete(Task).where(
+            and_(
+                current_user.id == Task.creator_id,
+                Task.id == task_id
+            )
+        )
+        session.execute(stmt)
         session.commit()

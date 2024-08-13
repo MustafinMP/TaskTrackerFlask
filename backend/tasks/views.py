@@ -6,7 +6,7 @@ import db_session
 from tasks.forms import CreateTaskForm, ChangeStatusForm, EditTaskForm, create_change_status_form, \
     create_edit_task_form
 from tasks.models import Task, Status
-import service as srv
+import tasks.service as srv
 
 blueprint = Blueprint('tasks', __name__)
 prefix: str = '/tasks'
@@ -48,6 +48,7 @@ def show_task(task_id: int):
     form: ChangeStatusForm = create_change_status_form(task)
     if form.validate_on_submit():
         srv.update_task_status(task_id, form.new_status.data)
+        task = srv.select_task_by_id(task_id)
         return render_template(prefix + '/show_task.html', task=task, form=form, save=True)
     return render_template(prefix + '/show_task.html', task=task, form=form, save=False)
 
@@ -57,7 +58,6 @@ def show_task(task_id: int):
 def update_task(task_id: int):
     if (task := srv.select_task_by_id(task_id)) is None:
         return abort(404)
-
     form: EditTaskForm = create_edit_task_form(task)
 
     if request.method == 'GET':
@@ -73,20 +73,7 @@ def update_task(task_id: int):
 @blueprint.route('/delete/<int:task_id>')
 @login_required
 def delete_task(task_id: int):
-    if (task := srv.select_task_by_id(task_id)) is None:
+    if srv.select_task_by_id(task_id) is None:
         return abort(404)
     srv.delete_task(task_id)
     return redirect('/tasks')
-
-
-@blueprint.route('/get')
-@login_required
-def get():
-    with db_session.create_session() as session:
-        tasks: list[Task] = session.query(Task).where(
-            and_(current_user.id == Task.creator_id)).all()
-        return jsonify(
-            {
-                'tasks': [task.to_dict(only=('name', 'creator.name', 'description', 'status')) for task in tasks]
-            }
-        )
