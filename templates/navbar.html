@@ -1,30 +1,18 @@
-<aside class="col-2 sticky-top ps-5 pe-1 py-2" style="max-height: 600px;">
-    <li class="list-group-item">
-        <div class="offcanvas-body container">
-            <a href="{{ url_for('auth.profile') }}"
-               class="row link-dark link-underline-opacity-25 link-underline-opacity-100-hover w-75 my-3"
-               style="font-size: 1.1rem py-auto">
-                <i class="bi bi-person-circle col-1"></i>
-                <div class="col-10">Profile</div>
-            </a>
-            <a href="{{ url_for('index') }}"
-               class="row link-dark link-underline-opacity-25 link-underline-opacity-100-hover w-75 my-3"
-               style="font-size: 1.1rem py-auto">
-                <i class="bi bi-house col-1"></i>
-                <div class="col-10">Home</div>
-            </a>
-            <a href="{{ url_for('tasks.tasks_by_statuses') }}"
-               class="row link-dark link-underline-opacity-25 link-underline-opacity-100-hover w-75 my-3"
-               style="font-size: 1.1rem py-auto">
-                <i class="bi bi-list-task col-1"></i>
-                <div class="col-10">Tasks</div>
-            </a>
-            <a href="{{ url_for('tasks.create_task') }}"
-               class="row link-dark link-underline-opacity-25 link-underline-opacity-100-hover w-75 my-3"
-               style="font-size: 1.1rem py-auto">
-                <i class="bi bi-plus-circle col-1"></i>
-                <div class="col-10">Create task</div>
-            </a>
-        </div>
-    </li>
+<aside class="aside-navbar">
+        <a href="{{ url_for('auth.profile') }}" class="navbar-item" style="font-size: 1.1rem">
+            <i class="bi bi-person-circle"></i>
+            <div class="col-10">Profile</div>
+        </a>
+        <a href="{{ url_for('index') }}" class="navbar-item" style="font-size: 1.1rem">
+            <i class="bi bi-house"></i>
+            <div class="">Home</div>
+        </a>
+        <a href="{{ url_for('tasks.tasks_by_statuses') }}" class="navbar-item" style="font-size: 1.1rem">
+            <i class="bi bi-list-task"></i>
+            <div class="">Tasks</div>
+        </a>
+        <a href="{{ url_for('tasks.create_task') }}" class="navbar-item" style="font-size: 1.1rem">
+            <i class="bi bi-plus-circle"></i>
+            <div class="">Create task</div>
+        </a>
 </aside>

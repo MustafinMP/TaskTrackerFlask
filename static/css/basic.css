@@ -1,0 +1,43 @@
+@media (max-width: 720px) {
+  .aside-navbar {
+    width: 100%;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1080px) {
+  .aside-navbar {
+    width: 20%;
+  }
+}
+
+@media (min-width: 1081px) {
+  .aside-navbar {
+    width: 15%;
+  }
+}
+
+.aside-navbar {
+  margin: 0;
+  padding: 2rem;
+  padding-top: 5rem;
+  display: grid;
+  border: 1px solid black;
+  gap: 1rem;
+  height: 22rem;
+}
+
+.navbar-item {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  height: 2.5rem;
+  text-decoration: none;
+  text-color: black;
+}
+
+.navbar-item * {
+  padding: 0.5rem;
+}
+
+.navbar-item:hover {
+  background: grey;
+}
