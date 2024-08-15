@@ -1,5 +1,5 @@
 {% extends "basic_template.html" %}
-{% block navbar %}{% include 'navbar2.html' %}{% endblock %}
+{% block navbar %}{% include 'navbar.html' %}{% endblock %}
 {% block content %}
 <div class="navbar w-75 ms-5 mt-5">
     <div class="container">
@@ -17,7 +17,7 @@
         <div class="bg-light py-2">
             {% for task in tasks_by_statuses[status.id] %}
             <a href="/tasks/{{ task.id }}"
-               class="custom-card-light my-3 mx-auto p-0 text-decoration-none text-dark text-start">
+               class="custom-card card-light my-3 mx-auto p-0 text-decoration-none text-dark text-start">
                 <div class="card-title h5 ms-3 mt-2">{{ task.name }}</div>
                 <p class="mx-3 mt-1 h-50 max-three-lines" style="font-size: 1rem;">{{ task.description }}</p>
                 <div class="h6 ms-3 mt-1 text-secondary">{{ task.created_date.strftime('%d.%m.%Y') }}</div>

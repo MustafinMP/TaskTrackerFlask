@@ -21,7 +21,6 @@
   padding: 2rem;
   padding-top: 5rem;
   display: grid;
-  border: 1px solid black;
   gap: 1rem;
   height: 22rem;
 }
@@ -31,13 +30,26 @@
   grid-template-columns: 1fr 4fr;
   height: 2.5rem;
   text-decoration: none;
-  text-color: black;
 }
 
 .navbar-item * {
   padding: 0.5rem;
+  font-size: 1.1rem;
 }
 
 .navbar-item:hover {
   background: grey;
+}
+
+.custom-card {
+  display: block;
+  width: 90%;
+  aspect-ratio: 2/1;
+}
+
+.max-three-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
