@@ -1,9 +1,9 @@
 from flask_login import current_user
-from sqlalchemy import select, and_, Select, delete, update
+from sqlalchemy import select, and_, delete, update
 from sqlalchemy.orm import joinedload
 
 import db_session
-from tasks.models import Status, Task
+from tasks.models import Status, Task, Tag
 
 
 def select_all_statuses() -> list[Status, ...]:
@@ -58,7 +58,7 @@ def update_task_status(task_id: int, new_status_id: int) -> None:
         session.commit()
 
 
-def update_task(task_id: int, new_name, new_description, new_status_id) -> None:
+def update_task(task_id: int, new_name: str, new_description: str, new_status_id: int) -> None:
     with db_session.create_session() as session:
         stmt = update(Task).where(
             and_(
@@ -74,7 +74,7 @@ def update_task(task_id: int, new_name, new_description, new_status_id) -> None:
         session.commit()
 
 
-def delete_task(task_id) -> None:
+def delete_task(task_id: int) -> None:
     with db_session.create_session() as session:
         stmt = delete(Task).where(
             and_(
@@ -83,4 +83,21 @@ def delete_task(task_id) -> None:
             )
         )
         session.execute(stmt)
+        session.commit()
+
+
+def add_tag_to_task(task_id: int, tag_id: int) -> None:
+    with db_session.create_session() as session:
+        stmt_task = select(Task).where(
+            and_(
+                current_user.id == Task.creator_id,
+                Task.id == task_id
+            )
+        )
+        task: Task = session.scalar(stmt_task)
+        stmt_tag = select(Tag).where(
+            Tag.id == tag_id
+        )
+        tag: Tag = session.scalar(stmt_tag)
+        tag.tasks.append(task)
         session.commit()

@@ -1,8 +1,6 @@
-from flask import Blueprint, redirect, render_template, request, abort, jsonify
+from flask import Blueprint, redirect, render_template, request, abort
 from flask_login import login_required, current_user
-from sqlalchemy import and_
 
-import db_session
 from tasks.forms import CreateTaskForm, ChangeStatusForm, EditTaskForm, create_change_status_form, \
     create_edit_task_form
 from tasks.models import Task, Status

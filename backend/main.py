@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-LOCAL = True
+LOCAL = False
 HOST = 'localhost' if LOCAL else '192.168.0.13'
 
 
@@ -39,5 +39,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
