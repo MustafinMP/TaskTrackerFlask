@@ -14,10 +14,10 @@
     {% for status in statuses %}
     <div class="col m-3 p-0" style="min-width: 16rem; max-width: 24rem;">
         <h3 class="px-2 py-3 {{ status.color_tag }}-theme-filled">{{ status.name }}</h3>
-        <div class="bg-light py-2">
+        <div class="py-2 card-container">
             {% for task in tasks_by_statuses[status.id] %}
             <a href="/tasks/{{ task.id }}"
-               class="custom-card card-light my-3 mx-auto p-0 text-decoration-none text-dark text-start">
+               class="custom-card my-3 mx-auto p-0 text-decoration-none text-dark text-start">
                 <div class="card-title h5 ms-3 mt-2">{{ task.name }}</div>
                 <p class="mx-3 mt-1 h-50 max-three-lines" style="font-size: 1rem;">{{ task.description }}</p>
                 <div class="h6 ms-3 mt-1 text-secondary">{{ task.created_date.strftime('%d.%m.%Y') }}</div>
