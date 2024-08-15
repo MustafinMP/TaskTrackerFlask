@@ -92,7 +92,7 @@
   color: var(--custom-dark) !important;
 }
 
-.theme-light a:hover {
+.theme-light .aside-navbar a:hover {
   background: var(--custom-light);
 }
 
@@ -117,7 +117,7 @@
   color: var(--custom-light) !important;
 }
 
-.theme-dark a:hover {
+.theme-dark .aside-navbar a:hover {
   background: var(--custom-dark);
 }
 
