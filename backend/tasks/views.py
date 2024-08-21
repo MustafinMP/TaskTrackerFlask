@@ -32,7 +32,12 @@ def tasks_by_statuses():
 def create_task():
     form = CreateTaskForm()
     if form.validate_on_submit():
-        srv.create_task(form.name.data, form.description.data, request.args.get('status', None))
+        srv.create_task(
+            form.name.data,
+            form.description.data,
+            form.deadline.data,
+            request.args.get('status', None)
+        )
         return redirect('/tasks')
     return render_template(prefix + '/create.html', form=form, title='Добавить задачу')
 

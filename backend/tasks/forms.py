@@ -1,15 +1,25 @@
+from datetime import datetime, timedelta
+
 from flask_wtf import FlaskForm
+from wtforms.fields.datetime import DateTimeLocalField
 from wtforms.fields.simple import StringField, SubmitField, TextAreaField
 from wtforms.fields import SelectField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError
 
 import db_session
+from config import MIN_DEADLINE_GAP
 from tasks.models import Status, Task
+
+
+def deadline_required(form, field):
+    if field.data < datetime.now() + MIN_DEADLINE_GAP:
+        raise ValidationError('Deadline must be early than today')
 
 
 class CreateTaskForm(FlaskForm):
     name = StringField('Заголовок', validators=[DataRequired()])
     description = TextAreaField('Описание задачи', validators=[DataRequired()])
+    deadline = DateTimeLocalField('Дата начала', validators=[deadline_required])
     submit = SubmitField('Создать')
 
 

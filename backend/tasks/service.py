@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_login import current_user
 from sqlalchemy import select, and_, delete, update
 from sqlalchemy.orm import joinedload
@@ -12,12 +14,14 @@ def select_all_statuses() -> list[Status, ...]:
         return session.scalars(stmt).all()
 
 
-def create_task(name: str, description: str, status_id: int | None = None) -> None:
+def create_task(name: str, description: str, deadline: datetime | None = None, status_id: int | None = None) -> None:
     with db_session.create_session() as session:
         task = Task()
         task.name = name
         task.description = description
         task.creator_id = current_user.get_id()
+        if deadline is not None:
+            task.deadline = deadline
         if status_id is not None:
             task.status_id = status_id
         session.add(task)
