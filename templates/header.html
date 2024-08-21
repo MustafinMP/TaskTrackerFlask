@@ -1,9 +1,9 @@
-<header class="header-block">
+<header class="header-block primary-theme-filled">
     <a href="/" class="header-logo"><img src="{{ url_for('static', filename='/img/HTrackerLogoHorizontal.png') }}"
                                  alt="HTracker"/></a>
     <nav class="header-nav">
-        <a href="/" class="h-home item-blue">Home</a>
-        <a href="/tasks" class="h-tasks item-blue">My tasks</a>
+        <a href="/" class="h-home item-primary">Home</a>
+        <a href="/tasks" class="h-tasks item-primary">My tasks</a>
     </nav>
     <div class="header-auth">
         {% if current_user.is_authenticated %}

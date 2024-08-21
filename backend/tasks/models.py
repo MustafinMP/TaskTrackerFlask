@@ -8,10 +8,11 @@ from db_session import SqlAlchemyBase
 
 color_tags: tuple[str] = tuple(
     [
-        'grey',
-        'red',
-        'orange',
-        'green',
+        'primary',
+        'danger',
+        'warning',
+        'success',
+        'light'
     ]
 )
 
