@@ -2,6 +2,7 @@
   display: block;
   width: 90%;
   aspect-ratio: 2/1;
+  border-radius: 0.25rem;
 }
 
 .max-three-lines {
@@ -9,4 +10,21 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.main-with-navbar {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+
+.border-1r {
+  border-radius: 1rem;
+}
+
+.border-05r {
+  border-radius: 0.5rem;
+}
+
+.border-025r {
+  border-radius: 0.25rem;
 }

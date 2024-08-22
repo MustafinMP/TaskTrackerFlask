@@ -9,7 +9,7 @@
     <div class="p-5">
         <h2 class="card-title py-2 d-inline">{{ task.name }}</h2>
         <a href="/tasks/edit/{{ task.id }}" class="navbar-item item-light d-inline"><i class="bi bi-pencil-square"></i></a>
-        <p class="h6 card-body py-2 text-secondary">
+        <p class="h6 card-body py-2 color-secondary">
             {% if task.deadline %}
             {{ task.deadline.strftime('%d.%m.%Y') }}
             {% else %}

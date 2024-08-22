@@ -1,66 +1,76 @@
 :root {
-  --color-primary: #0d6efd;
+  --color-primary: #4183d7;
+  --color-secondary: #bdc3c7;
   --color-danger: #dc3545;
-  --color-warning: #ffc107;
-  --color-success: #198754;
-  --color-dark: #212529;
-  --color-light: #e8e9ea;
-  --color-white: #f8f9fa;
+  --color-warning: #f9bf3b;
+  --color-success: #26c281;
+  --color-light: #f8f8f8;
+  --color-dark: #22313a;
+  --color-white: #ffffff;
+  --color-primary-hover: #3498db;
 }
 
-.danger-theme-light {
+.danger-light {
   border: 2px solid var(--color-danger);
   color: var(--color-dark) !important;
 }
 
-.warning-theme-light {
+.warning-light {
   border: 2px solid var(--color-warning);
   color: var(--custom-dark) !important;
 }
 
-.success-theme-light {
+.success-light {
   border: 2px solid var(--color-success);
   color: var(--color-dark) !important;
 }
 
-.light-theme-light {
+.light-light {
   border: 2px solid var(--color-light);
   color: var(--color-dark) !important;
 }
 
-.danger-theme-filled {
+.danger-filled {
   background: var(--color-danger);
   color: var(--color-dark) !important;
 }
 
-.warning-theme-filled {
+.warning-filled {
   background: var(--color-warning);
   color: var(--color-dark) !important;
 }
 
-.success-theme-filled {
+.success-filled {
   background: var(--color-success);
-  color: var(--color-light) !important;
+  color: var(--color-white) !important;
 }
 
-.primary-theme-filled {
+.primary-filled {
   background: var(--color-primary);
-  color: var(--color-light) !important;
+  color: var(--color-white) !important;
 }
 
-.light-theme-filled {
+.light-filled {
   background: var(--color-light);
   color: var(--color-dark) !important;
 }
 
+.secondary-filled {
+  background: var(--color-secondary);
+  color: var(--color-dark) !important;
+}
 
-.white-theme-filled {
+.white-filled {
   background: var(--color-white);
   color: var(--color-dark) !important;
 }
 
 .header-block {
   background: var(--color-primary);
+}
+
+body {
+  background: var(--color-light);
 }
 
 .item-light {
@@ -75,9 +85,6 @@
 .item-dark {
   text-decoration: none;
   color: var(--color-light) !important;
-}
-
-.item-dark:hover {
   background: var(--color-dark);
 }
 
@@ -88,14 +95,14 @@
 }
 
 .item-primary:hover {
-  background: #005eed;
+  background: var(--color-primary-hover);
   color: var(--color-dark);
 }
 
 
 .card-light {
-  background: white;
-  border: 1px solid var(--color-light);
+  background: var(--color-light);
+  border: 1px solid var(--color-white);
   text-decoration: none;
   color: var(--color-dark) !important;
 }
