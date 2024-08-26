@@ -1,8 +1,6 @@
-import os
-
 from flask import Blueprint, redirect, render_template
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.utils import secure_filename
+
 
 import db_session
 from auth.forms import LoginForm, RegisterForm
@@ -41,7 +39,6 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
         user: User = auth_srv.select_user_by_email(form.email)
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
