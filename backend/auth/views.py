@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 import db_session
 from auth.forms import LoginForm, RegisterForm
 from auth.models import User
+import auth.service as auth_srv
 from tasks.models import Task, Status
 
 blueprint = Blueprint('auth', __name__)
@@ -19,28 +20,19 @@ def register():
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
             return render_template(
-                'register.html',
+                prefix + '/register.html',
                 title='Регистрация',
                 form=form,
                 message="Пароли не совпадают"
             )
-        db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.email == form.email.data).first():
+        if auth_srv.user_exists_by_email(form.email.data):
             return render_template(
-                'register.html',
+                prefix + '/register.html',
                 title='Регистрация',
                 form=form,
                 message="Такой пользователь уже есть"
             )
-        file = form.image.data
-        filename = secure_filename(file.filename)
-        file.save(os.path.join('../static/uploads', filename))
-        user = User()
-        user.name = form.name.data
-        user.email = form.email.data
-        user.set_password(form.password.data)
-        db_sess.add(user)
-        db_sess.commit()
+        auth_srv.create_user(form)
         return redirect(prefix + '/login')
     return render_template(prefix + '/register.html', title='Регистрация', form=form)
 
@@ -50,7 +42,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        user: User = db_sess.query(User).filter(User.email == form.email.data).first()
+        user: User = auth_srv.select_user_by_email(form.email)
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/tasks")
