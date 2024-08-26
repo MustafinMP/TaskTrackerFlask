@@ -3,6 +3,7 @@
   width: 90%;
   aspect-ratio: 2/1;
   border-radius: 0.25rem;
+  margin: 1rem;
 }
 
 .max-three-lines {
@@ -10,6 +11,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  max-height: 5rem;
 }
 
 .main-with-navbar {
@@ -27,4 +29,22 @@
 
 .border-025r {
   border-radius: 0.25rem;
+}
+
+
+.page-header {
+  margin: 3rem 8rem 0 8rem;
+}
+
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+  margin: 3rem 8rem 0 8rem;
+}
+
+.form-card {
+  border-radius: 1.5rem;
+  margin: 3rem 24rem 0 8rem;
+  padding: 1.5rem;
 }

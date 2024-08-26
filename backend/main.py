@@ -13,7 +13,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 LOCAL = False
-HOST = 'localhost' if LOCAL else '192.168.0.13'
+HOST = 'localhost' if LOCAL else '192.168.0.14'
 
 
 @login_manager.user_loader

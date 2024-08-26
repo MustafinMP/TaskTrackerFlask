@@ -42,12 +42,12 @@
 
 .success-filled {
   background: var(--color-success);
-  color: var(--color-white) !important;
+  color: var(--color-dark) !important;
 }
 
 .primary-filled {
   background: var(--color-primary);
-  color: var(--color-white) !important;
+  color: var(--color-dark) !important;
 }
 
 .light-filled {
@@ -89,7 +89,7 @@ body {
 }
 
 .item-primary {
-  background: var(--color-blue);
+  background: var(--color-primary);
   text-decoration: none;
   color: var(--color-white) !important;
 }
