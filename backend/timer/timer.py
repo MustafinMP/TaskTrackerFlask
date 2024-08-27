@@ -31,13 +31,15 @@ class Timer:
     def get_time(self) -> timedelta:
         return self._time
 
-    def to_db_model(self):
+    def to_db_model(self) -> TimerDelta:
         model = TimerDelta()
         model.user_id = self.user_id
         model.task_id = self.task_id
         model.start_datetime = self.start_datetime
         model.end_datetime = datetime.now()
         model.interval = self._time
+        model.pause_count = self._pause_count
+        return model
 
     def loop(self) -> None:
         while True:
@@ -70,11 +72,12 @@ class TimerManager:
 
     def save_and_terminate(self, user_id) -> timedelta:
         model: TimerDelta = self._timers[user_id].to_db_model()
+        interval = model.interval
         with db_session.create_session() as session:
             session.add(model)
             session.commit()
         self.delete(user_id)
-        return model.interval
+        return interval
 
     def delete(self, user_id):
         del self._threads[user_id]

@@ -39,7 +39,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user: User = auth_srv.select_user_by_email(form.email)
+        user: User = auth_srv.select_user_by_email(form.email.data)
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/tasks")

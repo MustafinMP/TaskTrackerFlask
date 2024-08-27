@@ -51,7 +51,7 @@ def cont():
     return jsonify({'status': 200, 'message': None, 'data': str(timer_manager.get_time(current_user.id))})
 
 
-@blueprint.route('/terminate', methods=['POST'])
+@blueprint.route('/terminate', methods=['GET'])
 @login_required
 def terminate():
     if not timer_manager.has_timer(current_user.id):
