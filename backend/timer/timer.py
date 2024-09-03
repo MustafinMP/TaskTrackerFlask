@@ -1,9 +1,27 @@
 import threading
+from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from time import sleep
 
 import db_session
 from timer.models import TimerDelta
+
+
+@dataclass
+class TimerData:
+    time: timedelta
+    task_id: int
+    pause: bool
+
+    def as_dict(self):
+        return {key: value for key, value in asdict(self).items()}
+
+    def to_json(self):
+        return {
+            'time': str(self.time),
+            'task_id': self.task_id,
+            'pause': self.pause
+        }
 
 
 class Timer:
@@ -28,8 +46,8 @@ class Timer:
     def cont(self) -> None:
         self._pause = False
 
-    def get_time(self) -> timedelta:
-        return self._time
+    def get_data(self) -> TimerData:
+        return TimerData(time=self._time, task_id=self.task_id, pause=self._pause)
 
     def to_db_model(self) -> TimerDelta:
         model = TimerDelta()
@@ -61,8 +79,8 @@ class TimerManager:
     def has_timer(self, user_id) -> bool:
         return user_id in self._timers.keys()
 
-    def get_time(self, user_id) -> timedelta:
-        return self._timers[user_id].get_time()
+    def get_data(self, user_id) -> TimerData:
+        return self._timers[user_id].get_data()
 
     def pause(self, user_id) -> None:
         return self._timers[user_id].pause()

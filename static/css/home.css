@@ -1,0 +1,90 @@
+.home-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: 16rem 28rem;
+  gap: 3rem;
+  margin: 0 8rem 0 8rem;
+}
+
+.home-grid-title {
+  display: grid;
+  grid-template-columns: 1fr 4rem;
+  height: 4rem;
+  width: 100%;
+}
+
+.home-grid-title h6 {
+  margin: 1.2rem 2rem;
+  font-size: 1.5rem;
+}
+
+.home-grid-arrow-link {
+  border-radius: 0.5rem;
+  width: 3rem;
+  height: 3rem;
+  margin: 0.5rem;
+  padding: 0.4rem 0.7rem;
+}
+
+.home-grid-arrow-link i {
+  font-size: 1.5rem;
+}
+
+.home-grid-profile {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  padding: 2rem 2rem;
+}
+
+.home-grid-profile img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background-size: cover;
+  pointer-events: none;
+}
+
+.timer-display {
+  margin: 4rem;
+  margin-bottom: 6rem;
+  text-align: center;
+}
+
+.timer-two-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: center;
+}
+
+.timer-first-button {
+  grid-column: 2 / 3;
+}
+
+.timer-second-button {
+  grid-column: 3 / 4;
+}
+
+.timer-one-button {
+  display: grid;
+  text-align: center;
+  padding: 0 auto;
+}
+
+.timer-link {
+  border-radius: 0.5rem;
+  width: 3rem;
+  height: 3rem;
+  margin: 0.5rem;
+  padding: 0.4rem 0.7rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+
+.timer-button {
+  border-radius: 0.5rem;
+  width: 3rem;
+  height: 3rem;
+  margin: 0.5rem auto;
+  padding: 0.4rem 0.7rem;
+  border: none;
+}

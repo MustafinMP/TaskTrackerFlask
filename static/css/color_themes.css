@@ -55,6 +55,11 @@
   color: var(--color-dark) !important;
 }
 
+.light-filled-on-hover:hover {
+  background: var(--color-secondary);
+  color: var(--color-dark) !important;
+}
+
 .secondary-filled {
   background: var(--color-secondary);
   color: var(--color-dark) !important;
@@ -63,6 +68,12 @@
 .white-filled {
   background: var(--color-white);
   color: var(--color-dark) !important;
+}
+
+
+.dark-filled {
+  background: var(--color-dark);
+  color: var(--color-light) !important;
 }
 
 .header-block {

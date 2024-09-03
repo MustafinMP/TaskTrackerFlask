@@ -1,12 +1,12 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
-
 from auth.views import blueprint as blueprint_auth, prefix as prefix_auth
 from tasks.views import blueprint as blueprint_tasks, prefix as prefix_tasks
 from timer.api_views import blueprint as blueprint_timer, prefix as prefix_timer
 from auth.models import User
 from config import SECRET_KEY
 import db_session
+
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager()

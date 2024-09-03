@@ -1,5 +1,9 @@
-from flask import Blueprint, abort, jsonify
+import time
+
+from flask import Blueprint, abort, jsonify, session, Response
 from flask_login import login_required, current_user
+from flask_socketio import SocketIO
+
 import tasks.service as tasks_srv
 from timer.timer import TimerManager
 
@@ -28,7 +32,8 @@ def get_time():
     if not timer_manager.has_timer(current_user.id):
         return jsonify({'status': 404, 'message': "Timer doesn't exist"})
 
-    return jsonify({'status': 200, 'message': None, 'data': str(timer_manager.get_time(current_user.id))})
+    data = timer_manager.get_data(current_user.id).to_json()
+    return jsonify({'status': 200, 'message': None, 'data': data})
 
 
 @blueprint.route('/pause', methods=['GET'])
@@ -38,7 +43,7 @@ def pause():
         return jsonify({'status': 404, 'message': "Timer doesn't exist"})
 
     timer_manager.pause(current_user.id)
-    return jsonify({'status': 200, 'message': None, 'data': str(timer_manager.get_time(current_user.id))})
+    return jsonify({'status': 200, 'message': None, 'data': timer_manager.get_data(current_user.id).to_json()})
 
 
 @blueprint.route('/continue', methods=['GET'])
@@ -48,7 +53,7 @@ def cont():
         return jsonify({'status': 404, 'message': "Timer doesn't exist"})
 
     timer_manager.cont(current_user.id)
-    return jsonify({'status': 200, 'message': None, 'data': str(timer_manager.get_time(current_user.id))})
+    return jsonify({'status': 200, 'message': None, 'data': timer_manager.get_data(current_user.id).to_json()})
 
 
 @blueprint.route('/terminate', methods=['GET'])
