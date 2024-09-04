@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-from flask_login import LoginManager
+from flask import Flask, render_template, redirect, url_for
+from flask_login import LoginManager, current_user
 from auth.views import blueprint as blueprint_auth, prefix as prefix_auth
 from tasks.views import blueprint as blueprint_tasks, prefix as prefix_tasks
 from timer.api_views import blueprint as blueprint_timer, prefix as prefix_timer
@@ -29,7 +29,9 @@ app.register_blueprint(blueprint_timer, url_prefix=f'/api{prefix_timer}')
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Homepage')
+    if current_user.is_authenticated:
+        return render_template('index.html', title='Homepage')
+    return redirect(url_for('auth.login'))
 
 
 def main():

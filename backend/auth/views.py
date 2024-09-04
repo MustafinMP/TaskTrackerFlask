@@ -55,15 +55,16 @@ def logout():
 
 
 @blueprint.route('/profile')
-@login_required
 def profile():
-    with db_session.create_session() as session:
-        tasks: list[Task] = session.query(Task).where(current_user.id == Task.creator_id).all()
-        statuses: list[Status] = session.query(Status).all()
-        tasks_count: dict[str, int] = {status.name: 0 for status in statuses}
-        for task in tasks:
-            tasks_count[task.status.name] += 1
-    return render_template(prefix + '/profile.html', tasks_count=tasks_count)
+    if current_user.is_authenticated:
+        with db_session.create_session() as session:
+            tasks: list[Task] = session.query(Task).where(current_user.id == Task.creator_id).all()
+            statuses: list[Status] = session.query(Status).all()
+            tasks_count: dict[str, int] = {status.name: 0 for status in statuses}
+            for task in tasks:
+                tasks_count[task.status.name] += 1
+        return render_template(prefix + '/profile.html', tasks_count=tasks_count)
+    return redirect('/')
 
 
 @blueprint.route('/profile/edit')
