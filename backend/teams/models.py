@@ -12,6 +12,7 @@ class Team(SqlAlchemyBase):
     creator_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
 
     creator = relationship('User', foreign_keys=[creator_id])
+    members = relationship('Task', secondary='user_to_team', backref='teams')
 
 
 user_to_team = Table(

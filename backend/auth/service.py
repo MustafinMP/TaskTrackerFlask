@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import db_session
 from auth.forms import RegisterForm
 from auth.models import User
+from teams.service import create_team
 
 
 def save_file(file) -> str:
@@ -30,5 +31,6 @@ def create_user(form: RegisterForm):
     user.email = form.email.data
     user.set_password(form.password.data)
     save_file(form.image.data)
+    create_team(user.id, team_name=f"Personal {user.name}'s team")
     with db_session.create_session() as session:
         session.add(user)

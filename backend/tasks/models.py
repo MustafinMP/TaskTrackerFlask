@@ -26,9 +26,11 @@ class Task(SqlAlchemyBase, SerializerMixin):
     created_date: datetime = Column(TIMESTAMP, default=datetime.now)
     deadline: datetime = Column(TIMESTAMP, nullable=True)
     status_id: int = Column(Integer, ForeignKey('status.id'), default=0, nullable=False)
+    team_id: int = Column(Integer, ForeignKey('team.id'), nullable=True)
 
     creator = orm.relationship('User', foreign_keys=[creator_id])
     status = orm.relationship('Status', foreign_keys=[status_id])
+    team = orm.relationship('Team', foreign_keys=[team_id])
 
 
 class Status(SqlAlchemyBase, SerializerMixin):
