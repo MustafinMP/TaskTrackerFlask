@@ -1,0 +1,129 @@
+{% extends "basic_template.html" %}
+{% block content %}
+<script>
+    window.onload = (event) => {
+        document.getElementById('timer-buttons-no-task').style.display = 'none';
+        document.getElementById('timer-buttons-on-pause').style.display = 'none';
+        document.getElementById('timer-buttons-on-run').style.display = 'none';
+    };
+</script>
+<main class="main-with-navbar">
+    {% include 'navbar.html' %}
+    <div>
+        <section class="page-header">
+            <h1>Главная</h1>
+        </section>
+        <section class="home-grid">
+            <article class="white-filled border-1r">
+                <div class="home-grid-title">
+                    <h6>Profile</h6>
+                    <a href="{{ url_for('auth.profile') }}"
+                       class="home-grid-arrow-link light-filled light-filled-on-hover">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="home-grid-profile">
+                    <img src="{% if current_user.image %} ../static/uploads/{{ current_user.image }}
+                    {% else %} ../static/img/default.png
+                    {% endif %}"/>
+                    <h6>{{ current_user.name }}</h6>
+                </div>
+
+            </article>
+            <article class="white-filled border-1r">text</article>
+            <article class="white-filled border-1r">
+                <div class="home-grid-title">
+                    <h6>Timer</h6>
+                    <!--                    <a href="{{ url_for('auth.profile') }}" class="home-grid-arrow-link light-filled light-filled-on-hover">-->
+                    <!--                        <i class="bi bi-arrow-right"></i>-->
+                    <!--                    </a>-->
+                </div>
+                <h1 id="timer-display" class="timer-display display-5">--:--:--</h1>
+
+                <div id="timer-buttons-no-task" class="timer-one-button">
+                    <a href="{{ url_for('tasks.tasks_by_statuses') }}"
+                       class="timer-link light-filled light-filled-on-hover">
+                        К задачам
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div id="timer-buttons-on-run" class="timer-two-buttons">
+                    <div class="timer-first-button">
+                        <button id="button-pause" class="timer-button light-filled light-filled-on-hover">
+                            <i class="bi bi-pause"></i>
+                        </button>
+                    </div>
+                    <div class="timer-second-button">
+                        <button id="button-stop1" class="timer-button light-filled light-filled-on-hover">
+                            <i class="bi bi-stop-fill"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="timer-buttons-on-pause" class="timer-two-buttons">
+                    <div class="timer-first-button">
+                        <button id="button-play" class="timer-button light-filled light-filled-on-hover">
+                            <i class="bi bi-play-fill"></i>
+                        </button>
+                    </div>
+                    <div class="timer-second-button">
+                        <button id="button-stop2" class="timer-button light-filled light-filled-on-hover">
+                            <i class="bi bi-stop-fill"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </article>
+            <article class="white-filled border-1r">text</article>
+        </section>
+    </div>
+</main>
+<script>
+    let item = document.querySelector('#aside-navbar-home');
+    item.classList.remove('item-light');
+    item.classList.add('item-dark');
+</script>
+<script>
+    setInterval(function() {
+    fetch('/api/timers/check')
+               .then(response => response.json())
+               .then(data => {
+                   if (data.status == 200) {
+                       document.getElementById('timer-display').innerHTML = data.data.time;
+                       if (data.data.pause) {
+                           document.getElementById('timer-buttons-no-task').style.display = 'none';
+                           document.getElementById('timer-buttons-on-pause').style.display = 'grid';
+                           document.getElementById('timer-buttons-on-run').style.display = 'none';
+                       } else {
+                           document.getElementById('timer-buttons-no-task').style.display = 'none';
+                           document.getElementById('timer-buttons-on-pause').style.display = 'none';
+                           document.getElementById('timer-buttons-on-run').style.display = 'grid';
+                       }
+
+                   } else {
+                       document.getElementById('timer-display').innerHTML = "--:--:--";
+                       document.getElementById('timer-buttons-no-task').style.display = 'block';
+                       document.getElementById('timer-buttons-on-pause').style.display = 'none';
+                       document.getElementById('timer-buttons-on-run').style.display = 'none';
+                   }
+               });
+    }, 200);
+</script>
+<script>
+    function pause() {
+        fetch('/api/timers/pause');
+    }
+    function run() {
+        fetch('/api/timers/continue');
+    }
+    function stop() {
+        fetch('/api/timers/terminate');
+    }
+    document.getElementById('button-play').onclick = run;
+    document.getElementById('button-pause').onclick = pause;
+    document.getElementById('button-stop1').onclick = stop;
+    document.getElementById('button-stop2').onclick = stop;
+</script>
+
+{% endblock %}

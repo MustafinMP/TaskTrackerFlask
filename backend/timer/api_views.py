@@ -12,6 +12,7 @@ prefix: str = '/timers'
 
 
 timer_manager = TimerManager()
+timer_manager.run()
 
 
 @blueprint.route('/create/<int:task_id>', methods=['GET'])

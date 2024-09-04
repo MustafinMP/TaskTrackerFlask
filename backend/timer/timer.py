@@ -2,6 +2,7 @@ import threading
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from time import sleep
+from math import ceil
 
 import db_session
 from timer.models import TimerDelta
@@ -18,7 +19,8 @@ class TimerData:
 
     def to_json(self):
         return {
-            'time': str(self.time),
+
+            'time': str(timedelta(seconds=ceil(self.time.total_seconds()))),
             'task_id': self.task_id,
             'pause': self.pause
         }
@@ -34,9 +36,8 @@ class Timer:
         self.start_datetime = datetime.now()
 
     def update(self) -> None:
-        sleep(1)
         if not self._pause:
-            self._time += timedelta(seconds=1)
+            self._time += timedelta(seconds=0.1)
 
     def pause(self) -> None:
         if not self._pause:
@@ -55,26 +56,18 @@ class Timer:
         model.task_id = self.task_id
         model.start_datetime = self.start_datetime
         model.end_datetime = datetime.now()
-        model.interval = self._time
+        model.interval = timedelta(seconds=ceil(self._time.total_seconds()))
         model.pause_count = self._pause_count
         return model
-
-    def loop(self) -> None:
-        while True:
-            self.update()
 
 
 class TimerManager:
     def __init__(self):
-        self._timers: dict[Timer] = dict()
-        self._threads: dict[threading.Thread] = dict()
+        self._timers: dict[int, Timer] = dict()
 
     def add_timer(self, user_id: int, task_id: int) -> None:
         new_timer = Timer(user_id, task_id)
-        thread = threading.Thread(target=new_timer.loop, daemon=True)
-        thread.start()
         self._timers[user_id] = new_timer
-        self._threads[user_id] = thread
 
     def has_timer(self, user_id) -> bool:
         return user_id in self._timers.keys()
@@ -97,6 +90,15 @@ class TimerManager:
         self.delete(user_id)
         return interval
 
+    def loop(self):
+        while True:
+            sleep(0.1)
+            for timer in self._timers.values():
+                timer.update()
+
+    def run(self):
+        thread = threading.Thread(target=self.loop, daemon=True)
+        thread.start()
+
     def delete(self, user_id):
-        del self._threads[user_id]
         del self._timers[user_id]
