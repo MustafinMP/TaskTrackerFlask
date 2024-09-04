@@ -1,13 +1,13 @@
 {% extends "basic_template.html" %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/show_task.css') }}">
 <main class="main-with-navbar">
     {% include 'navbar.html' %}
-    <section class="bg-light p-5">
-        <a href="{{ url_for('tasks.tasks_by_statuses') }}" class="navbar-item item-light" style="width: 10%;">
-            <i class="bi bi-arrow-left"></i>
-            <div>Вернуться</div>
-        </a>
-        <div class="p-5">
+    <div>
+        <section class="page-header">
+            <h1>Task № {{ task.id }}</h1>
+        </section>
+        <section class="show-task-grid white-filled border-1r">
             <h2 class="card-title py-2 d-inline">{{ task.name }}</h2>
             <a href="/tasks/edit/{{ task.id }}" class="navbar-item item-light d-inline"><i
                     class="bi bi-pencil-square"></i></a>
@@ -19,7 +19,7 @@
                 {% endif %}
             </p>
             <p class="card-body py-3" style="font-size: 1.1rem;">{{ task.description }}</p>
-            <form action="" method="post" class="mb-3 w-75 bg-light needs-validation" novalidate>
+            <form action="" method="post" class="mb-3 w-75 needs-validation" novalidate>
                 {{ form.csrf_token }}
                 {{ form.new_status.label(class="d-block mb-2") }}
                 <div class="d-inline-block align-text-top">
@@ -31,7 +31,8 @@
                     {% endfor %}
                 </div>
                 <div class="d-inline-block align-text-top ms-2">
-                    {{ form.submit(type="submit", class="btn btn-primary", id="SubmitButton", style="display: none") }}
+                    {{ form.submit(type="submit", class="btn btn-primary", id="SubmitButton", style="display: none")
+                    }}
                 </div>
                 {% if save %}
                 <div class="d-inline-block align-text-top ms-2">
@@ -39,10 +40,10 @@
                 </div>
                 {% endif %}
             </form>
-        </div>
-        <p class="card-body py-2">Автор: {{ task.creator.name }}</p>
-        <a href="/tasks/delete/{{ task.id }}" class="btn btn-outline-danger btn-lg">Удалить</a>
-    </section>
+            <p class="card-body py-2">Автор: {{ task.creator.name }}</p>
+            <a href="/tasks/delete/{{ task.id }}" class="btn btn-outline-danger btn-lg">Удалить</a>
+        </section>
+    </div>
 </main>
 <script>
     let item = document.querySelector('#aside-navbar-tasks');
