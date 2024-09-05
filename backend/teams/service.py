@@ -17,7 +17,10 @@ def create_team(creator_id: int, team_name: str = None) -> None:
     if team_name is None:
         team_name = 'New team'
     new_team.name = team_name
+    user_stmt = select(User).where(User.id == creator_id)
     with db_session.create_session() as session:
+        user = session.scalar(user_stmt)
+        new_team.members.append(user)
         session.add(new_team)
         session.commit()
 

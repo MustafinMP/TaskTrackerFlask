@@ -16,6 +16,12 @@ def save_file(file) -> str:
     return filename
 
 
+def select_user_by_id(user_id: int) -> User | None:
+    with db_session.create_session() as session:
+        stmt = select(User).where(User.id == user_id)
+        return session.scalar(stmt)
+
+
 def select_user_by_email(user_email: str) -> User | None:
     with db_session.create_session() as session:
         stmt = select(User).where(User.email == user_email)
