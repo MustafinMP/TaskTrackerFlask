@@ -1,6 +1,7 @@
 from sqlalchemy import String, ForeignKey, Table, Column, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from auth.models import User
 from db_session import SqlAlchemyBase
 
 
@@ -11,8 +12,8 @@ class Team(SqlAlchemyBase):
     name: Mapped[str] = mapped_column(String(128), nullable=False)
     creator_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
 
+    members: Mapped[User] = relationship('Team', secondary='user_to_team')
     creator = relationship('User', foreign_keys=[creator_id])
-    members = relationship('Task', secondary='user_to_team', backref='teams')
 
 
 user_to_team = Table(

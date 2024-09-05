@@ -5,7 +5,13 @@ from auth.models import User
 from teams.models import Team
 
 
-def create_team(creator_id: int, team_name: str = None):
+def create_team(creator_id: int, team_name: str = None) -> None:
+    """Create new team and save it to database.
+
+    :param creator_id: the id of the user creating the team.
+    :param team_name: the name of new team. Defaults to ``'127.0.0.1'``
+    """
+
     new_team = Team()
     new_team.creator_id = creator_id
     if team_name is None:
@@ -17,6 +23,12 @@ def create_team(creator_id: int, team_name: str = None):
 
 
 def add_new_team_members(team_id: int, *new_member_ids: list[int]) -> None:
+    """Create new team and save it to database.
+
+    :param team_id: the id of the current team.
+    :param new_member_ids: the list of ids of new team members.
+    """
+
     with db_session.create_session() as session:
         stmt = select(Team).where(Team.id == team_id)
         team = session.scalar(stmt)

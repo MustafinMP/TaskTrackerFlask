@@ -20,7 +20,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     image: str = Column(String, nullable=True, default='default.png')
     current_team_id: int = Column(Integer, ForeignKey('team.id'), nullable=True)
 
-    current_team = relationship('Task', foreign_keys=[current_team_id])
+    current_team = relationship('Team', foreign_keys=[current_team_id])
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

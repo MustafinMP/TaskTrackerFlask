@@ -10,22 +10,23 @@ from teams.service import create_team
 
 
 def save_file(file) -> str:
+    print(type(file))
     filename = secure_filename(file.filename)
     file.save(os.path.join('../static/uploads', filename))
     return filename
 
 
-def select_user_by_email(user_email):
+def select_user_by_email(user_email: str) -> User | None:
     with db_session.create_session() as session:
         stmt = select(User).where(User.email == user_email)
         return session.scalar(stmt)
 
 
-def user_exists_by_email(user_email):
+def user_exists_by_email(user_email: str) -> bool:
     return select_user_by_email(user_email) is not None
 
 
-def create_user(form: RegisterForm):
+def create_user(form: RegisterForm) -> None:
     user = User()
     user.name = form.name.data
     user.email = form.email.data
