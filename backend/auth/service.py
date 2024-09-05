@@ -17,22 +17,46 @@ def save_file(file) -> str:
 
 
 def select_user_by_id(user_id: int) -> User | None:
+    """Find user in database by id.
+
+    :param user_id: the id of the user.
+    :return: user object or none.
+    """
+
     with db_session.create_session() as session:
         stmt = select(User).where(User.id == user_id)
         return session.scalar(stmt)
 
 
 def select_user_by_email(user_email: str) -> User | None:
+    """Find user in database by email.
+
+    :param user_email: the email of the user.
+    :return: user object or none.
+    """
+
     with db_session.create_session() as session:
         stmt = select(User).where(User.email == user_email)
         return session.scalar(stmt)
 
 
 def user_exists_by_email(user_email: str) -> bool:
+    """Check that user exists in database.
+
+    :param user_email: the email of the user.
+    :return: user object or none.
+    """
+
     return select_user_by_email(user_email) is not None
 
 
 def create_user(form: RegisterForm) -> None:
+    """Create new user by data from register form.
+
+    :param form: the valid form with register data.
+    :return: no return.
+    """
+
     user = User()
     user.name = form.name.data
     user.email = form.email.data

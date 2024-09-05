@@ -10,6 +10,7 @@ def create_team(creator_id: int, team_name: str = None) -> None:
 
     :param creator_id: the id of the user creating the team.
     :param team_name: the name of new team. Defaults to ``'127.0.0.1'``
+    :return: no return.
     """
 
     new_team = Team()
@@ -30,6 +31,7 @@ def add_new_team_members(team_id: int, *new_member_ids: list[int]) -> None:
 
     :param team_id: the id of the current team.
     :param new_member_ids: the list of ids of new team members.
+    :return: no return.
     """
 
     with db_session.create_session() as session:

@@ -1,3 +1,5 @@
+from typing import Callable
+
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session, declarative_base
@@ -5,11 +7,16 @@ from config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
 
 SqlAlchemyBase = declarative_base()
 
-__factory = None
+__factory: Callable = None
 DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
 def global_init() -> None:
+    """Init a database session factory.
+
+    :return: no return.
+    """
+
     global __factory
 
     if __factory:
@@ -28,5 +35,10 @@ def global_init() -> None:
 
 
 def create_session() -> Session:
+    """Return a new database session.
+
+    :return: new database session object.
+    """
+
     global __factory
     return __factory()

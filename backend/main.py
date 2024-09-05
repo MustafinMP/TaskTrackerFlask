@@ -35,6 +35,11 @@ def index():
 
 
 def main():
+    """Just a main function.
+
+    :return: no return.
+    """
+
     db_session.global_init()
     print('Запуск сервера')
     app.run(host=HOST)
