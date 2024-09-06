@@ -21,7 +21,7 @@ class Team(SqlAlchemyBase):
     name: Mapped[str] = mapped_column(String(128), nullable=False)
     creator_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
 
-    members: Mapped[List['User']] = relationship(secondary=user_to_team, back_populates='teams')
+    members: Mapped[List['User']] = relationship(secondary=user_to_team, back_populates='teams', lazy="selectin")
     creator = relationship('User', foreign_keys=[creator_id])
 
 

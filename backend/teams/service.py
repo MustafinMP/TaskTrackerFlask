@@ -1,4 +1,5 @@
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 import db_session
 from auth.models import User
@@ -42,3 +43,9 @@ def add_new_team_members(team_id: int, *new_member_ids: list[int]) -> None:
             member_stmt = select(User).where(User.id == new_member_id)
             if (member := session.scalar(member_stmt)) is not None:
                 team.members.append(member)
+
+
+def get_user_teams(user_id: int) -> [Team, ...]:
+    with db_session.create_session() as session:
+        teams_stmt = select(Team).join(Team.members).filter(User.id == user_id)
+        return session.scalars(teams_stmt).fetchall()

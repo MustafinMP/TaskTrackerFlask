@@ -4,17 +4,20 @@
     {% include 'navbar.html' %}
     <div>
         <section class="page-header">
-            <h1>{{ title }}</h1>
+            <h1>Мои команды</h1>
         </section>
         <section>
-            {% for team in current_user.teams %}
+            {% for team in teams %}
             {{ team.name }}
+            {% for member in team.members %}
+            {{ member.name }}
+            {% endfor %}
             {% endfor %}
         </section>
     </div>
 </main>
 <script>
-    let item = document.querySelector('#aside-navbar-create');
+    let item = document.querySelector('#aside-navbar-teams');
     item.classList.remove('item-light');
     item.classList.add('item-dark');
 </script>
