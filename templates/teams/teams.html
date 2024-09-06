@@ -1,0 +1,21 @@
+{% extends "basic_template.html" %}
+{% block content %}
+<main class="main-with-navbar">
+    {% include 'navbar.html' %}
+    <div>
+        <section class="page-header">
+            <h1>{{ title }}</h1>
+        </section>
+        <section>
+            {% for team in current_user.teams %}
+            {{ team.name }}
+            {% endfor %}
+        </section>
+    </div>
+</main>
+<script>
+    let item = document.querySelector('#aside-navbar-create');
+    item.classList.remove('item-light');
+    item.classList.add('item-dark');
+</script>
+{% endblock %}

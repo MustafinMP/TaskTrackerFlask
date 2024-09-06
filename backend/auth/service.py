@@ -1,6 +1,7 @@
 import os
 
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 
 import db_session
@@ -24,7 +25,7 @@ def select_user_by_id(user_id: int) -> User | None:
     """
 
     with db_session.create_session() as session:
-        stmt = select(User).where(User.id == user_id)
+        stmt = select(User).where(User.id == user_id).options(joinedload(User.teams))
         return session.scalar(stmt)
 
 

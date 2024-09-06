@@ -1,8 +1,17 @@
+from typing import List
+
 from sqlalchemy import String, ForeignKey, Table, Column, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from auth.models import User
 from db_session import SqlAlchemyBase
+
+
+user_to_team = Table(
+    'user_to_team', SqlAlchemyBase.metadata,
+    Column('user', Integer, ForeignKey('user.id')),
+    Column('team', Integer, ForeignKey('team.id'))
+)
 
 
 class Team(SqlAlchemyBase):
@@ -12,15 +21,9 @@ class Team(SqlAlchemyBase):
     name: Mapped[str] = mapped_column(String(128), nullable=False)
     creator_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
 
-    members: Mapped[User] = relationship('Team', secondary='user_to_team')
+    members: Mapped[List['User']] = relationship(secondary=user_to_team, back_populates='teams')
     creator = relationship('User', foreign_keys=[creator_id])
 
-
-user_to_team = Table(
-    'user_to_team', SqlAlchemyBase.metadata,
-    Column('user', Integer, ForeignKey('user.id')),
-    Column('team', Integer, ForeignKey('team.id'))
-)
 
 # class Role(SqlAlchemyBase):
 #     id: int = Column(Integer, primary_key=True, autoincrement=True)
