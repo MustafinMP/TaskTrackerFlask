@@ -6,6 +6,7 @@ from sqlalchemy.orm import joinedload
 
 import db_session
 from tasks.models import Status, Task, Tag
+from teams.models import Team, user_to_team
 
 
 def select_all_statuses() -> list[Status, ...]:
@@ -33,7 +34,7 @@ def create_task(name: str, description: str, deadline: datetime | None = None, s
         task = Task()
         task.name = name
         task.description = description
-        task.creator_id = current_user.get_id()
+        task.team_id = current_user.current_team_id
         if deadline is not None:
             task.deadline = deadline
         if status_id is not None:
@@ -51,10 +52,9 @@ def select_task_by_status(status_id: int) -> list[Task, ...]:
 
     with db_session.create_session() as session:
         stmt = select(Task).where(
-            and_(
-                current_user.id == Task.creator_id,
-                Task.status_id == status_id
-            )
+            Task.status_id == status_id
+        ).join(Task.team).filter(
+            Team.id == current_user.current_team_id
         )
         return session.scalars(stmt).all()
 
@@ -68,11 +68,12 @@ def select_task_by_id(task_id: int) -> Task | None:
 
     with db_session.create_session() as session:
         stmt = select(Task).where(
-            and_(
-                current_user.id == Task.creator_id,
-                Task.id == task_id
-            )
-        ).options(joinedload(Task.creator))
+            Task.id == task_id
+        ).join(Task.team).filter(
+            Team.id == current_user.current_team_id
+        ).options(
+            joinedload(Task.creator)
+        )
         return session.scalar(stmt)
 
 
@@ -87,8 +88,9 @@ def update_task_status(task_id: int, new_status_id: int) -> None:
     with db_session.create_session() as session:
         stmt = update(Task).where(
             and_(
-                current_user.id == Task.creator_id,
-                Task.id == task_id
+                Task.id == task_id,
+                Task.team_id == user_to_team.c.team,
+                user_to_team.c.team == current_user.current_team_id
             )
         ).values(status_id=new_status_id)
         session.execute(stmt)
@@ -108,8 +110,9 @@ def update_task(task_id: int, new_name: str, new_description: str, new_status_id
     with db_session.create_session() as session:
         stmt = update(Task).where(
             and_(
-                current_user.id == Task.creator_id,
-                Task.id == task_id
+                Task.id == task_id,
+                Task.team_id == user_to_team.c.team,
+                user_to_team.c.team == current_user.current_team_id
             )
         ).values(
             name=new_name,
@@ -130,8 +133,9 @@ def delete_task(task_id: int) -> None:
     with db_session.create_session() as session:
         stmt = delete(Task).where(
             and_(
-                current_user.id == Task.creator_id,
-                Task.id == task_id
+                Task.id == task_id,
+                Task.team_id == user_to_team.c.team,
+                user_to_team.c.team == current_user.current_team_id
             )
         )
         session.execute(stmt)
@@ -153,6 +157,7 @@ def add_tag_to_task(task_id: int, tag_id: int) -> None:
                 Task.id == task_id
             )
         )
+        task_stmt = select(Task).where(Task.id == task_id).join(Task.team).filter(Team.id == current_user.current_team)
         task: Task = session.scalar(stmt_task)
         stmt_tag = select(Tag).where(
             Tag.id == tag_id
