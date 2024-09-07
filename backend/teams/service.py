@@ -48,4 +48,5 @@ def add_new_team_members(team_id: int, *new_member_ids: list[int]) -> None:
 def get_user_teams(user_id: int) -> [Team, ...]:
     with db_session.create_session() as session:
         teams_stmt = select(Team).join(Team.members).filter(User.id == user_id)
-        return session.scalars(teams_stmt).fetchall()
+        teams = session.scalars(teams_stmt).fetchall()
+        return teams

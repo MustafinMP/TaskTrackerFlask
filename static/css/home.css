@@ -3,7 +3,6 @@
   grid-template-columns: 2fr 3fr;
   grid-template-rows: 16rem 28rem;
   gap: 3rem;
-  margin: 0 8rem 0 8rem;
 }
 
 .home-grid-title {

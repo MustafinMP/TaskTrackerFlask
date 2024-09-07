@@ -6,7 +6,7 @@ from auth.views import blueprint as blueprint_auth, prefix as prefix_auth
 from tasks.views import blueprint as blueprint_tasks, prefix as prefix_tasks
 from timer.api_views import blueprint as blueprint_timer, prefix as prefix_timer
 from teams.views import blueprint as blueprint_teams, prefix as prefix_teams
-from auth.models import User
+
 from config import SECRET_KEY
 import db_session
 
@@ -15,7 +15,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-LOCAL = True
+LOCAL = False
 HOST = 'localhost' if LOCAL else '192.168.0.14'
 
 

@@ -7,7 +7,7 @@
             <h1>Мои задачи</h1>
         </section>
         {% if current_user.is_authenticated %}
-        <section class="tasks-grid">
+        <section class="main-margin tasks-grid">
             {% for status in statuses %}
             <article>
                 <h3 class="px-3 py-3 {{ status.color_tag }}-filled border-05r">{{ status.name }}</h3>

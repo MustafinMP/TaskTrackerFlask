@@ -24,7 +24,6 @@ class Team(SqlAlchemyBase):
     members: Mapped[List['User']] = relationship(secondary=user_to_team, back_populates='teams', lazy="selectin")
     creator = relationship('User', foreign_keys=[creator_id])
 
-
 # class Role(SqlAlchemyBase):
 #     id: int = Column(Integer, primary_key=True, autoincrement=True)
 #     name: str = Column(String, nullable=False)
