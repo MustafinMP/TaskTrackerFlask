@@ -50,12 +50,12 @@ def select_task_by_status(status_id: int) -> list[Task, ...]:
     :return: list of tasks with current status.
     """
 
+    stmt = select(Task).where(
+        Task.status_id == status_id
+    ).join(Task.team).filter(
+        Team.id == current_user.current_team_id
+    )
     with db_session.create_session() as session:
-        stmt = select(Task).where(
-            Task.status_id == status_id
-        ).join(Task.team).filter(
-            Team.id == current_user.current_team_id
-        )
         return session.scalars(stmt).all()
 
 
@@ -66,15 +66,25 @@ def select_task_by_id(task_id: int) -> Task | None:
     :return: task object or none.
     """
 
+    stmt = select(Task).where(
+        Task.id == task_id
+    ).join(Task.team).filter(
+        Team.id == current_user.current_team_id
+    ).options(
+        joinedload(Task.creator)
+    )
     with db_session.create_session() as session:
-        stmt = select(Task).where(
-            Task.id == task_id
-        ).join(Task.team).filter(
-            Team.id == current_user.current_team_id
-        ).options(
-            joinedload(Task.creator)
-        )
         return session.scalar(stmt)
+
+
+def select_task_by_team_id(team_id: int) -> list[Task, ...]:
+    stmt = select(Task).join(Task.team).filter(
+        Team.id == team_id
+    ).options(
+        joinedload(Task.creator)
+    )
+    with db_session.create_session() as session:
+        return session.scalars(stmt)
 
 
 def update_task_status(task_id: int, new_status_id: int) -> None:
@@ -85,14 +95,14 @@ def update_task_status(task_id: int, new_status_id: int) -> None:
     :return: no return.
     """
 
+    stmt = update(Task).where(
+        and_(
+            Task.id == task_id,
+            Task.team_id == user_to_team.c.team,
+            user_to_team.c.team == current_user.current_team_id
+        )
+    ).values(status_id=new_status_id)
     with db_session.create_session() as session:
-        stmt = update(Task).where(
-            and_(
-                Task.id == task_id,
-                Task.team_id == user_to_team.c.team,
-                user_to_team.c.team == current_user.current_team_id
-            )
-        ).values(status_id=new_status_id)
         session.execute(stmt)
         session.commit()
 
@@ -107,18 +117,18 @@ def update_task(task_id: int, new_name: str, new_description: str, new_status_id
     :return: no return.
     """
 
-    with db_session.create_session() as session:
-        stmt = update(Task).where(
-            and_(
-                Task.id == task_id,
-                Task.team_id == user_to_team.c.team,
-                user_to_team.c.team == current_user.current_team_id
-            )
-        ).values(
-            name=new_name,
-            description=new_description,
-            status_id=new_status_id
+    stmt = update(Task).where(
+        and_(
+            Task.id == task_id,
+            Task.team_id == user_to_team.c.team,
+            user_to_team.c.team == current_user.current_team_id
         )
+    ).values(
+        name=new_name,
+        description=new_description,
+        status_id=new_status_id
+    )
+    with db_session.create_session() as session:
         session.execute(stmt)
         session.commit()
 
@@ -130,14 +140,14 @@ def delete_task(task_id: int) -> None:
     :return: no return.
     """
 
-    with db_session.create_session() as session:
-        stmt = delete(Task).where(
-            and_(
-                Task.id == task_id,
-                Task.team_id == user_to_team.c.team,
-                user_to_team.c.team == current_user.current_team_id
-            )
+    stmt = delete(Task).where(
+        and_(
+            Task.id == task_id,
+            Task.team_id == user_to_team.c.team,
+            user_to_team.c.team == current_user.current_team_id
         )
+    )
+    with db_session.create_session() as session:
         session.execute(stmt)
         session.commit()
 
@@ -150,18 +160,16 @@ def add_tag_to_task(task_id: int, tag_id: int) -> None:
     :return: no return.
     """
 
-    with db_session.create_session() as session:
-        stmt_task = select(Task).where(
-            and_(
-                current_user.id == Task.creator_id,
-                Task.id == task_id
-            )
-        )
-        task_stmt = select(Task).where(Task.id == task_id).join(Task.team).filter(Team.id == current_user.current_team)
-        task: Task = session.scalar(stmt_task)
-        stmt_tag = select(Tag).where(
+    task_stmt = select(Task).where(
+        Task.id == task_id
+    ).join(Task.team).filter(
+        Team.id == current_user.current_team
+    )
+    tag_stmt = select(Tag).where(
             Tag.id == tag_id
         )
-        tag: Tag = session.scalar(stmt_tag)
+    with db_session.create_session() as session:
+        task: Task = session.scalar(task_stmt)
+        tag: Tag = session.scalar(tag_stmt)
         tag.tasks.append(task)
         session.commit()

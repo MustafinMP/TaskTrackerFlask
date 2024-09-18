@@ -1,11 +1,11 @@
+from datetime import datetime, date
 from typing import List
 
-from sqlalchemy import String, ForeignKey, Table, Column, Integer
+from sqlalchemy import String, ForeignKey, Table, Column, Integer, TIMESTAMP, Date, Boolean, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from auth.models import User
 from db_session import SqlAlchemyBase
-
 
 user_to_team = Table(
     'user_to_team', SqlAlchemyBase.metadata,
@@ -34,3 +34,13 @@ class Team(SqlAlchemyBase):
 # class Permission(SqlAlchemyBase):
 #     id: int = Column(Integer, primary_key=True, autoincrement=True)
 #     name: str = Column(String, nullable=False)
+
+
+class InviteLink(SqlAlchemyBase):
+    __tablename__ = 'invite_link'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    team_id: Mapped[int] = mapped_column(nullable=False)
+    burn_datetime: Mapped[datetime] = mapped_column(TIMESTAMP)
+    key: Mapped[str] = mapped_column(String)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
