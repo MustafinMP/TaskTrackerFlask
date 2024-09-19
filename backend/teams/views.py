@@ -21,10 +21,10 @@ def invite(team_id: int):
     return render_template(prefix + '/invite.html', invite_link=invite_link)
 
 
-@blueprint.route('/join_team')
+@blueprint.route('/join')
 @login_required
 def join_team():
-    link_id = int(request.args.get('team_id'))
+    link_id = int(request.args.get('id'))
     key = request.args.get('key')
     join_to_team(link_id, key, current_user.id)
     return redirect(url_for('teams.user_teams'))

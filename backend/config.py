@@ -13,3 +13,8 @@ DB_USER = os.environ.get('DB_USER')
 DB_PASS = os.environ.get('DB_PASS')
 INVITE_LINK_SALT = os.environ.get('INVITE_LINK_SALT')
 MIN_DEADLINE_GAP = timedelta(minutes=5)
+
+
+mode = 'local'
+HOST = 'localhost' if mode == 'local' else '192.168.0.14'
+

@@ -7,16 +7,13 @@ from tasks.views import blueprint as blueprint_tasks, prefix as prefix_tasks
 from timer.api_views import blueprint as blueprint_timer, prefix as prefix_timer
 from teams.views import blueprint as blueprint_teams, prefix as prefix_teams
 
-from config import SECRET_KEY
+from config import SECRET_KEY, HOST
 import db_session
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SECRET_KEY'] = SECRET_KEY
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-LOCAL = True
-HOST = 'localhost' if LOCAL else '192.168.0.14'
 
 
 @login_manager.user_loader
