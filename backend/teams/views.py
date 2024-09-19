@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 
 from teams.invite_link_service import generate_link, join_to_team
-from teams.service import get_user_teams
+from teams.service import get_user_teams, get_team_by_id
 
 blueprint = Blueprint('teams', __name__)
 prefix: str = '/teams'
@@ -33,6 +33,6 @@ def join_team():
 @blueprint.route('/<int:team_id>')
 @login_required
 def single_team(team_id: int):
-    #team = get_team_by_id(team_id)
+    team = get_team_by_id(team_id)
     invite_link = generate_link(team_id)
-    return render_template(prefix + '/single_team.html', invite_link=invite_link)
+    return render_template(prefix + '/single_team.html', invite_link=invite_link, team=team)
