@@ -6,6 +6,7 @@ from auth.views import blueprint as blueprint_auth, prefix as prefix_auth
 from tasks.views import blueprint as blueprint_tasks, prefix as prefix_tasks
 from timer.api_views import blueprint as blueprint_timer, prefix as prefix_timer
 from teams.views import blueprint as blueprint_teams, prefix as prefix_teams
+from teams.api_views import blueprint as blueprint_teams_api
 
 from config import SECRET_KEY, HOST
 import db_session
@@ -25,6 +26,7 @@ app.register_blueprint(blueprint_auth, url_prefix=prefix_auth)
 app.register_blueprint(blueprint_tasks, url_prefix=prefix_tasks)
 app.register_blueprint(blueprint_timer, url_prefix=f'/api{prefix_timer}')
 app.register_blueprint(blueprint_teams, url_prefix=prefix_teams)
+app.register_blueprint(blueprint_teams_api, url_prefix=f'/api{prefix_teams}')
 
 
 @app.route('/')

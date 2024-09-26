@@ -2,11 +2,12 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import ForeignKey, DateTime, Interval
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy_serializer import SerializerMixin
 
 from db_session import SqlAlchemyBase
 
 
-class TimerDelta(SqlAlchemyBase):
+class TimerDelta(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'timer_delta'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -17,5 +18,5 @@ class TimerDelta(SqlAlchemyBase):
     interval: Mapped[timedelta] = mapped_column(Interval, nullable=False)
     pause_count: Mapped[int] = mapped_column(default=0)
 
-    user = relationship('User', foreign_keys=[user_id])
-    task = relationship('Task', foreign_keys=[task_id])
+    user = relationship('User', foreign_keys=[user_id], lazy="joined")
+    task = relationship('Task', foreign_keys=[task_id], lazy="joined")

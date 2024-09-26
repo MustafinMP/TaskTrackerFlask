@@ -32,8 +32,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     image: str = Column(String, nullable=True, default='default.png')
     current_team_id: int = Column(Integer, ForeignKey('team.id'), nullable=True)
 
-    current_team = relationship('Team', foreign_keys=[current_team_id])
-    teams = relationship('Team', secondary='user_to_team', back_populates='members')
+    current_team = relationship('Team', foreign_keys=[current_team_id], lazy="joined")
+    teams = relationship('Team', secondary='user_to_team', back_populates='members', lazy="joined")
 
     def set_password(self, password: str) -> None:
         """Create hash of user password and save it.

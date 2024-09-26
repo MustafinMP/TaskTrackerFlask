@@ -1,8 +1,9 @@
-from datetime import datetime, date
+from datetime import datetime
 from typing import List
 
-from sqlalchemy import String, ForeignKey, Table, Column, Integer, TIMESTAMP, Date, Boolean, DateTime
+from sqlalchemy import String, ForeignKey, Table, Column, Integer, TIMESTAMP, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy_serializer import SerializerMixin
 
 from auth.models import User
 from db_session import SqlAlchemyBase
@@ -14,15 +15,15 @@ user_to_team = Table(
 )
 
 
-class Team(SqlAlchemyBase):
+class Team(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'team'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(128), nullable=False)
     creator_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
 
-    members: Mapped[List['User']] = relationship(secondary=user_to_team, back_populates='teams', lazy="selectin")
-    creator = relationship('User', foreign_keys=[creator_id])
+    members: Mapped[List['User']] = relationship(secondary=user_to_team, back_populates='teams', lazy="joined")
+    creator = relationship('User', foreign_keys=[creator_id], lazy="joined")
 
 # class Role(SqlAlchemyBase):
 #     id: int = Column(Integer, primary_key=True, autoincrement=True)
@@ -36,7 +37,7 @@ class Team(SqlAlchemyBase):
 #     name: str = Column(String, nullable=False)
 
 
-class InviteLink(SqlAlchemyBase):
+class InviteLink(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'invite_link'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

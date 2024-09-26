@@ -49,7 +49,7 @@ def add_new_team_members(team_id: int, *new_member_ids: list[int]) -> None:
 def get_user_teams(user_id: int) -> [Team, ...]:
     with db_session.create_session() as session:
         teams_stmt = select(Team).join(Team.members).filter(User.id == user_id)
-        teams = session.scalars(teams_stmt).fetchall()
+        teams = session.scalars(teams_stmt).unique().fetchall()
         return teams
 
 
@@ -74,3 +74,20 @@ def get_team_by_id(team_id: int) -> Team:
         return session.scalar(stmt)
 
 
+def get_team_data_by_id(team_id: int) -> dict:
+    stmt = select(Team).where(
+        Team.id == team_id
+    ).join(Team.members).where(
+        User.id == current_user.id
+    )
+    with db_session.create_session() as session:
+        team = session.scalar(stmt)
+        return team.to_dict(
+            only=(
+                'name',
+                'creator.id',
+                'creator.name',
+                'members.id',
+                'members.name'
+            )
+        )

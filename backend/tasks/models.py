@@ -28,9 +28,9 @@ class Task(SqlAlchemyBase, SerializerMixin):
     status_id: int = Column(Integer, ForeignKey('status.id'), default=0, nullable=False)
     team_id: int = Column(Integer, ForeignKey('team.id'), nullable=True)
 
-    creator = orm.relationship('User', foreign_keys=[creator_id])
-    status = orm.relationship('Status', foreign_keys=[status_id])
-    team = orm.relationship('Team', foreign_keys=[team_id], backref='tasks')
+    creator = orm.relationship('User', foreign_keys=[creator_id], lazy="joined")
+    status = orm.relationship('Status', foreign_keys=[status_id], lazy="joined")
+    team = orm.relationship('Team', foreign_keys=[team_id], backref='tasks', lazy="joined")
 
 
 class Status(SqlAlchemyBase, SerializerMixin):
@@ -50,7 +50,7 @@ class Tag(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'tag'
     id: int = Column(Integer, primary_key=True, autoincrement=True)
     name: str = Column(String(length=50), nullable=False)
-    tasks = orm.relationship('Task', secondary='task_to_tag', backref='tags', lazy='selectin')
+    tasks = orm.relationship('Task', secondary='task_to_tag', backref='tags', lazy="joined")
 
 
 task_to_tag = Table(

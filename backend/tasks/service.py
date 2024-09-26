@@ -56,7 +56,7 @@ def select_task_by_status(status_id: int) -> list[Task, ...]:
         Team.id == current_user.current_team_id
     )
     with db_session.create_session() as session:
-        return session.scalars(stmt).all()
+        return session.scalars(stmt).unique().all()
 
 
 def select_task_by_id(task_id: int) -> Task | None:
@@ -84,7 +84,7 @@ def select_task_by_team_id(team_id: int) -> list[Task, ...]:
         joinedload(Task.creator)
     )
     with db_session.create_session() as session:
-        return session.scalars(stmt)
+        return session.scalars(stmt).unique()
 
 
 def update_task_status(task_id: int, new_status_id: int) -> None:

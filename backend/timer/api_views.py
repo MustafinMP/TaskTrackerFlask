@@ -1,8 +1,5 @@
-import time
-
-from flask import Blueprint, abort, jsonify, session, Response
+from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
-from flask_socketio import SocketIO
 
 import tasks.service as tasks_srv
 from timer.timer import TimerManager
