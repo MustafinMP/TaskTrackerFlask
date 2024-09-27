@@ -19,7 +19,7 @@ def deadline_required(form, field):
 class CreateTaskForm(FlaskForm):
     name = StringField('Заголовок', validators=[DataRequired()])
     description = TextAreaField('Описание задачи', validators=[DataRequired()])
-    deadline = DateTimeLocalField('Дата начала', validators=[deadline_required, Optional()])
+    deadline = DateTimeLocalField('Дата окончания', validators=[deadline_required, Optional()])
     submit = SubmitField('Создать')
 
 

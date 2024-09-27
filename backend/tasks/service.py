@@ -39,6 +39,7 @@ def create_task(name: str, description: str, deadline: datetime | None = None, s
             task.deadline = deadline
         if status_id is not None:
             task.status_id = status_id
+            task.creator_id = current_user.id
         session.add(task)
         session.commit()
 
