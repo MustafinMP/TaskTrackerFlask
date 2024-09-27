@@ -15,7 +15,7 @@ timer_manager.run()
 @blueprint.route('/create/<int:task_id>', methods=['GET'])
 @login_required
 def create_timer(task_id: int):
-    if (task := tasks_srv.select_task_by_id(task_id)) is None:
+    if (task := tasks_srv.get_task_by_id(task_id)) is None:
         return jsonify({'status': 404, 'message': "Task doesn't exist"})
     if task.creator_id != current_user.id:
         return jsonify({'status': 403, 'message': "Forbidden"})

@@ -22,7 +22,7 @@ class Task(SqlAlchemyBase, SerializerMixin):
     id: int = Column(Integer, primary_key=True, autoincrement=True, index=True)
     name: str = Column(String, nullable=False)
     description: str = Column(String, nullable=True)
-    creator_id: int = Column(Integer, ForeignKey('user.id'), nullable=False, index=True)
+    creator_id: int = Column(Integer, ForeignKey('user.id'), nullable=True, index=True)
     created_date: datetime = Column(TIMESTAMP, default=datetime.now)
     deadline: datetime = Column(TIMESTAMP, nullable=True)
     status_id: int = Column(Integer, ForeignKey('status.id'), default=0, nullable=False)
