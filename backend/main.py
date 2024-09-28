@@ -1,5 +1,7 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_login import LoginManager, current_user
+# from werkzeug.middleware.dispatcher import DispatcherMiddleware
+# from prometheus_client import make_wsgi_app
 
 from auth.service import select_user_by_id
 from auth.views import blueprint as blueprint_auth, prefix as prefix_auth
@@ -13,6 +15,10 @@ import db_session
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SECRET_KEY'] = SECRET_KEY
+# app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+#     '/metrics': make_wsgi_app()
+# })
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 

@@ -1,46 +1,41 @@
-{% extends "basic_template.html" %}
+{% extends "basic_template_with_navbar.html" %}
+
+{% block title %}Мои задачи{% endblock %}
+
 {% block content %}
-<main class="main-with-navbar">
-    {% include 'navbar.html' %}
-    <div>
-        <section class="page-header">
-            <h1>Мои задачи</h1>
-        </section>
-        {% if current_user.is_authenticated %}
-        <section class="main-margin tasks-grid">
-            {% for status in statuses %}
-            <article>
-                <h3 class="px-3 py-3 {{ status.color_tag }}-filled border-05r">{{ status.name }}</h3>
-                <div class="py-2 white-filled border-05r">
-                    {% for task in tasks_by_statuses[status.id] %}
-                    <a href="/tasks/{{ task.id }}"
-                       class="custom-card card-light p-0 text-decoration-none text-dark text-start" draggable="true">
-                        <div class="card-title h5 ms-3 mt-2">{{ task.name }}</div>
-                        <p class="mx-3 mt-1 h-50 max-three-lines" style="font-size: 1rem;">{{ task.description }}</p>
-                        <div class="h6 ms-3 mt-1 text-secondary">
-                            {% if task.deadline %}
-                            {{ task.created_date.strftime('%d.%m.%Y') }}
-                            {% else %}
-                            Без дедлайна
-                            {% endif %}
-                        </div>
-                    </a>
-                    {% endfor %}
+
+<section class="tasks-grid">
+    {% for status in statuses %}
+    <article>
+        <h3 class="px-3 py-3 {{ status.color_tag }}-filled border-05r">{{ status.name }}</h3>
+        <div class="py-2 white-filled border-05r">
+            {% for task in tasks_by_statuses[status.id] %}
+            <a href="/tasks/{{ task.id }}"
+               class="custom-card card-light p-0 text-decoration-none text-dark text-start" draggable="true">
+                <div class="card-title h5 ms-3 mt-2">{{ task.name }}</div>
+                <p class="mx-3 mt-1 h-50 max-three-lines" style="font-size: 1rem;">{{ task.description }}</p>
+                <div class="h6 ms-3 mt-1 text-secondary">
+                    {% if task.deadline %}
+                    {{ task.created_date.strftime('%d.%m.%Y') }}
+                    {% else %}
+                    Без дедлайна
+                    {% endif %}
                 </div>
-                {% if status.id == 0 %}
-                <a href="{{ url_for('tasks.create_task') }}?status={{ status.id }}"
-                   class="white-filled my-3 px-auto py-3 text-decoration-none text-center"
-                   style="display: block">
-                    <div class="me-2 d-inline">Create task</div>
-                    <i class="bi bi-plus-circle"></i>
-                </a>
-                {% endif %}
-            </article>
+            </a>
             {% endfor %}
-        </section>
+        </div>
+        {% if status.id == 0 %}
+        <a href="{{ url_for('tasks.create_task') }}?status={{ status.id }}"
+           class="white-filled my-3 px-auto py-3 text-decoration-none text-center"
+           style="display: block">
+            <div class="me-2 d-inline">Create task</div>
+            <i class="bi bi-plus-circle"></i>
+        </a>
         {% endif %}
-    </div>
-</main>
+    </article>
+    {% endfor %}
+</section>
+
 <script>
     let item = document.querySelector('#aside-navbar-tasks');
     item.classList.remove('white-filled-with-hover');

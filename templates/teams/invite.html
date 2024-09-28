@@ -1,16 +1,13 @@
-{% extends "basic_template.html" %}
+{% extends "basic_template_with_navbar.html" %}
+
+{% block title %}Мои команды{% endblock %}
+
 {% block content %}
-<main class="main-with-navbar">
-    {% include 'navbar.html' %}
-    <div>
-        <section class="page-header">
-            <h1>Мои команды</h1>
-        </section>
-        <section class="main-margin">
-            {{ invite_link }}
-        </section>
-    </div>
-</main>
+
+<section class="">
+    {{ invite_link }}
+</section>
+
 <script>
     let item = document.querySelector('#aside-navbar-teams');
     item.classList.remove('white-filled-with-hover');

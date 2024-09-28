@@ -1,43 +1,38 @@
-{% extends "basic_template.html" %}
+{% extends "basic_template_with_navbar.html" %}
+
+{% block title %}Мои команды{% endblock %}
+
 {% block content %}
-<main class="main-with-navbar">
-    {% include 'navbar.html' %}
-    <div>
-        <section class="page-header">
-            <h1>Мои команды</h1>
-        </section>
-        <section class="main-margin">
-            {% for team in teams %}
-            <article class="white-filled border-1r team-card">
-                <h6>{{ team.name }}</h6>
-                <div class="member-block">
-                    <div class="member-images">
-                        {% for member in team.members %}
-                        {% if loop.index0 < 3 %}
-                        <img src="{% if member.image %} ../static/uploads/{{ member.image }}
+
+{% for team in teams %}
+<article class="white-filled border-1r team-card">
+    <h6>{{ team.name }}</h6>
+    <div class="member-block">
+        <div class="member-images">
+            {% for member in team.members %}
+            {% if loop.index0 < 3 %}
+            <img src="{% if member.image %} ../static/uploads/{{ member.image }}
                     {% else %} ../static/img/default.png
                     {% endif %}"/>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="member-count">
-                        {% set m_count = team.members|length %}
-                        <span class="member-count-num">{{ m_count }}</span>
-                        {% if m_count % 10 == 1 %}
-                        участник
-                        {% elif m_count % 10 > 1 and m_count < 5 %}
-                        участника
-                        {% else %}
-                        участников
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="tasks">team tasks count</div>
-            </article>
+            {% endif %}
             {% endfor %}
-        </section>
+        </div>
+        <div class="member-count">
+            {% set m_count = team.members|length %}
+            <span class="member-count-num">{{ m_count }}</span>
+            {% if m_count % 10 == 1 %}
+            участник
+            {% elif m_count % 10 > 1 and m_count < 5 %}
+            участника
+            {% else %}
+            участников
+            {% endif %}
+        </div>
     </div>
-</main>
+    <div class="tasks">team tasks count</div>
+</article>
+{% endfor %}
+
 <script>
     let item = document.querySelector('#aside-navbar-teams');
     item.classList.remove('white-filled-with-hover');

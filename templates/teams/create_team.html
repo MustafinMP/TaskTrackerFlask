@@ -1,28 +1,25 @@
-{% extends "basic_template.html" %}
+{% extends "basic_template_with_navbar.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
 {% block content %}
-<main class="main-with-navbar">
-    {% include 'navbar.html' %}
+
+<form action="" method="post" class="white-filled form-card">
+    {{ csrf_token }}
+    {{ form.hidden_tag() }}
     <div>
-        <section class="page-header">
-            <h1>{{ title }}</h1>
-        </section>
-        <form action="" method="post" class="white-filled form-card">
-            {{ csrf_token }}
-            {{ form.hidden_tag() }}
-            <div>
-                {{ form.team_name.label }}<br>
-                {{ form.team_name(class="form-control") }}<br>
-                {% for error in form.team_name.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-                {% endfor %}
-            </div>
-            <p>{{ form.submit(type="submit", class="btn primary-filled-with-hover") }}</p>
-            <div>{{ message }}</div>
-        </form>
+        {{ form.team_name.label }}<br>
+        {{ form.team_name(class="form-control") }}<br>
+        {% for error in form.team_name.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
     </div>
-</main>
+    <p>{{ form.submit(type="submit", class="btn primary-filled-with-hover") }}</p>
+    <div>{{ message }}</div>
+</form>
+
 <script>
     let item = document.querySelector('#aside-navbar-teams');
     item.classList.remove('white-filled-with-hover');
