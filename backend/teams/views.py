@@ -12,7 +12,7 @@ prefix: str = '/teams'
 @blueprint.route('/all')
 @login_required
 def user_teams():
-    return render_template(prefix + '/teams.html', teams=srv.get_user_teams(current_user.id))
+    return render_template(prefix + '/teams.html', teams=srv.get_user_teams_by_id(current_user.id))
 
 
 @blueprint.route('/create', methods=['GET', 'POST'])
@@ -20,7 +20,7 @@ def user_teams():
 def create_team():
     create_form = CreateTeamForm()
     if create_form.validate_on_submit():
-        srv.create_team(current_user.id, create_form.team_name.data)
+        srv.add_team(current_user.id, create_form.team_name.data)
         return redirect('/teams/all')
     return render_template(prefix + '/create_team.html', form=create_form, title='Создать команду')
 

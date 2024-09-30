@@ -3,7 +3,7 @@ from flask_login import LoginManager, current_user
 # from werkzeug.middleware.dispatcher import DispatcherMiddleware
 # from prometheus_client import make_wsgi_app
 
-from auth.service import select_user_by_id
+from auth.service import get_user_by_id
 from auth.views import blueprint as blueprint_auth, prefix as prefix_auth
 from tasks.views import blueprint as blueprint_tasks, prefix as prefix_tasks
 from timer.api_views import blueprint as blueprint_timer, prefix as prefix_timer
@@ -25,7 +25,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return select_user_by_id(user_id)
+    return get_user_by_id(user_id)
 
 
 app.register_blueprint(blueprint_auth, url_prefix=prefix_auth)

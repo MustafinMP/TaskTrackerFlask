@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 import db_session
 from auth.forms import RegisterForm
 from auth.models import User
-from teams.service import create_team
+from teams.service import add_team
 
 
 def save_file(file) -> str:
@@ -17,7 +17,7 @@ def save_file(file) -> str:
     return filename
 
 
-def select_user_by_id(user_id: int) -> User | None:
+def get_user_by_id(user_id: int) -> User | None:
     """Find user in database by id.
 
     :param user_id: the id of the user.
@@ -29,7 +29,7 @@ def select_user_by_id(user_id: int) -> User | None:
         return session.scalar(stmt)
 
 
-def select_user_by_email(user_email: str) -> User | None:
+def get_user_by_email(user_email: str) -> User | None:
     """Find user in database by email.
 
     :param user_email: the email of the user.
@@ -48,10 +48,10 @@ def user_exists_by_email(user_email: str) -> bool:
     :return: user object or none.
     """
 
-    return select_user_by_email(user_email) is not None
+    return get_user_by_email(user_email) is not None
 
 
-def create_user(form: RegisterForm) -> None:
+def add_user(form: RegisterForm) -> None:
     """Create new user by data from register form.
 
     :param form: the valid form with register data.
@@ -63,6 +63,6 @@ def create_user(form: RegisterForm) -> None:
     user.email = form.email.data
     user.set_password(form.password.data)
     save_file(form.image.data)
-    create_team(user.id, team_name=f"Personal {user.name}'s team")
+    add_team(user.id, team_name=f"Personal {user.name}'s team")
     with db_session.create_session() as session:
         session.add(user)

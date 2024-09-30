@@ -30,7 +30,7 @@ def register():
                 form=form,
                 message="Такой пользователь уже есть"
             )
-        auth_srv.create_user(form)
+        auth_srv.add_user(form)
         return redirect(prefix + '/login')
     return render_template(prefix + '/register.html', title='Регистрация', form=form)
 
@@ -39,7 +39,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user: User = auth_srv.select_user_by_email(form.email.data)
+        user: User = auth_srv.get_user_by_email(form.email.data)
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/tasks")

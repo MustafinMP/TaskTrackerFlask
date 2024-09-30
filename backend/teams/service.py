@@ -1,12 +1,12 @@
 from flask_login import current_user
-from sqlalchemy import select, and_, update
+from sqlalchemy import select, and_
 
 import db_session
 from auth.models import User
 from teams.models import Team, user_to_team
 
 
-def create_team(creator_id: int, team_name: str = None) -> None:
+def add_team(creator_id: int, team_name: str = None) -> None:
     """Create new team and save it to database.
 
     :param creator_id: the id of the user creating the team.
@@ -46,7 +46,7 @@ def add_new_team_members(team_id: int, *new_member_ids: list[int]) -> None:
         session.commit()
 
 
-def get_user_teams(user_id: int) -> [Team, ...]:
+def get_user_teams_by_id(user_id: int) -> list[Team, ...]:
     with db_session.create_session() as session:
         teams_stmt = select(Team).join(Team.members).filter(User.id == user_id)
         teams = session.scalars(teams_stmt).unique().fetchall()

@@ -12,7 +12,7 @@
             {% for task in tasks_by_statuses[status.id] %}
             <a href="/tasks/{{ task.id }}"
                class="custom-card card-light p-0 text-decoration-none text-dark text-start" draggable="true">
-                <div class="card-title h5 ms-3 mt-2">{{ task.name }}</div>
+                <div class="card-title h5 ms-3 mt-2">№{{ task.id }} {{ task.name }}</div>
                 <p class="mx-3 mt-1 h-50 max-three-lines" style="font-size: 1rem;">{{ task.description }}</p>
                 <div class="h6 ms-3 mt-1 text-secondary">
                     {% if task.deadline %}
