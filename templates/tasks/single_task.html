@@ -4,20 +4,19 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='/css/show_task.css') }}">
-
-<section class="show-task-grid white-filled border-1r">
-    <h2 class="card-title py-2 d-inline">{{ task.name }}</h2>
-    <a href="/tasks/edit/{{ task.id }}" class="navbar-item item-light d-inline"><i
-            class="bi bi-pencil-square"></i></a>
-    <p class="h6 card-body py-2 color-secondary">
+<section class="task-card white-filled border-1r">
+    <h2 class="task-title">{{ task.name }}</h2>
+    <h6 class="task-deadline">
         {% if task.deadline %}
         {{ task.deadline.strftime('%d.%m.%Y') }}
         {% else %}
         Без дедлайна
         {% endif %}
-    </p>
-    <p class="card-body py-3" style="font-size: 1.1rem;">{{ task.description }}</p>
+    </h6>
+    <a href="/tasks/edit/{{ task.id }}" class="navbar-item light-filled d-inline">
+        <i class="bi bi-pencil-square"></i>
+    </a>
+    <p class="task-description py-3" style="font-size: 1.1rem;">{{ task.description }}</p>
     <form action="" method="post" class="mb-3 w-75 needs-validation" novalidate>
         {{ form.csrf_token }}
         {{ form.new_status.label(class="d-block mb-2") }}
@@ -39,6 +38,20 @@
         {% endif %}
     </form>
     <p class="card-body py-2">Автор: {{ task.creator.name }}</p>
+    <div>
+        <button id="button-start" class="timer-button light-filled light-filled-on-hover">
+            <i class="bi bi-play-fill"></i>
+        </button>
+        <button id="button-run" class="timer-button light-filled light-filled-on-hover">
+            <i class="bi bi-play-fill"></i>
+        </button>
+        <button id="button-stop" class="timer-button light-filled light-filled-on-hover">
+            <i class="bi bi-stop-fill"></i>
+        </button>
+        <button id="button-pause" class="timer-button light-filled light-filled-on-hover">
+            <i class="bi bi-pause"></i>
+        </button>
+    </div>
     <a href="/tasks/delete/{{ task.id }}" class="btn btn-outline-danger btn-lg">Удалить</a>
 </section>
 
@@ -61,16 +74,20 @@
 </script>
 <script>
     function start() {
-        fetch('/api/timers/create/{{ task.id }}');
+        fetch('../../api/timers/create/{{ task.id }}');
     }
     function pause() {
-        fetch('/api/timers/pause');
+        fetch('../../api/timers/pause');
     }
     function run() {
-        fetch('/api/timers/continue');
+        fetch('../../api/timers/continue');
     }
     function stop() {
-        fetch('/api/timers/terminate');
+        fetch('../../api/timers/terminate');
     }
+    document.getElementById('button-start').onclick = start;
+    document.getElementById('button-run').onclick = run;
+    document.getElementById('button-stop').onclick = stop;
+    document.getElementById('button-pause').onclick = pause;
 </script>
 {% endblock %}

@@ -53,7 +53,7 @@ def show_task(task_id: int):
         task_service.update_task(task_id, new_status_id=form.new_status.data)
         task = task_service.get_task_by_id(task_id)
         return render_template(prefix + '/show_task.html', task=task, form=form, save=True)
-    return render_template(prefix + '/show_task.html', task=task, form=form, save=False)
+    return render_template(prefix + '/single_task.html', task=task, form=form, save=False)
 
 
 @blueprint.route('/edit/<int:task_id>', methods=['GET', 'POST'])

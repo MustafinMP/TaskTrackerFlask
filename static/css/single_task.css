@@ -1,0 +1,12 @@
+.task-card {
+  padding: 1.2rem 2rem;
+  margin-top: 2rem;
+}
+
+.task-deadline {
+  padding-left: 0.5rem;
+}
+
+.task-description {
+  width: 80%;
+}
