@@ -37,6 +37,14 @@
         </div>
         {% endif %}
     </form>
+    <div class="dropdown">
+        <button class="dropbtn {{ task.status.color_tag }}-filled border-05r">{{ task.status.name }}</button>
+        <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+        </div>
+    </div>
     <p class="card-body py-2">Автор: {{ task.creator.name }}</p>
     <div>
         <button id="button-start" class="timer-button light-filled light-filled-on-hover">

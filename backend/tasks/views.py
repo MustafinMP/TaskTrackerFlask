@@ -1,6 +1,7 @@
-from flask import Blueprint, redirect, render_template, request, abort
+from flask import Blueprint, redirect, render_template, request, abort, jsonify
 from flask_login import login_required, current_user
 
+from tasks.exceptions import UserPermissionError, TaskDoesNotExistError
 from tasks.forms import CreateTaskForm, ChangeStatusForm, EditTaskForm, create_change_status_form, \
     create_edit_task_form
 from tasks.models import Task, Status
@@ -76,7 +77,24 @@ def update_task(task_id: int):
 @blueprint.route('/delete/<int:task_id>')
 @login_required
 def delete_task(task_id: int):
+    # if task_service.get_task_by_id(task_id) is None:
+    #     return abort(404)
+    # task_service.delete_task(task_id)
+    try:
+        task_service.delete_task2(task_id)
+        return redirect('/tasks')
+    except TaskDoesNotExistError:
+        return abort(404)
+    except UserPermissionError:
+        return abort(404)
+
+
+@blueprint.route('/change_status')
+@login_required
+def change_task_status():
+    task_id = request.args.get('task_id')
+    new_status_id = request.args.get('status_id')
     if task_service.get_task_by_id(task_id) is None:
         return abort(404)
-    task_service.delete_task(task_id)
-    return redirect('/tasks')
+    task_service.update_task(task_id, new_status_id=new_status_id)
+    return jsonify({'status': 200, 'message': None})

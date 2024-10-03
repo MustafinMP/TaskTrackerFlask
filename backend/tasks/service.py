@@ -5,7 +5,9 @@ from sqlalchemy import select, and_, delete, update
 from sqlalchemy.orm import joinedload
 
 import db_session
+from tasks.exceptions import TaskDoesNotExistError, UserPermissionError
 from tasks.models import Status, Task, Tag
+from tasks.repository import TaskRepository
 from teams.models import Team, user_to_team
 
 
@@ -158,3 +160,14 @@ def add_tag_to_task(task_id: int, tag_id: int) -> None:
         tag: Tag = session.scalar(tag_stmt)
         tag.tasks.append(task)
         session.commit()
+
+
+def delete_task2(task_id: int) -> None:
+    with db_session.create_session() as session:
+        repository = TaskRepository(session)
+        task: Task = repository.get_by_id(task_id)
+        if not task:
+            raise TaskDoesNotExistError
+        if current_user not in task.team.members:
+            raise UserPermissionError
+        repository.delete_object(task)

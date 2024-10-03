@@ -10,3 +10,47 @@
 .task-description {
   width: 80%;
 }
+
+.dropbtn {
+    width: 8rem;
+    height: 3rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+/* Контейнер для выпадающего списка */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Скрытый контент выпадающего списка */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    opacity: 0;
+    animation: fadeIn 0.5s;
+}
+
+/* Стили для ссылок внутри выпадающего списка */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Стили для ссылок при наведении */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+}

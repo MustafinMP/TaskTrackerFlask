@@ -1,0 +1,6 @@
+class TaskDoesNotExistError(Exception):
+    ...
+
+
+class UserPermissionError(Exception):
+    ...
