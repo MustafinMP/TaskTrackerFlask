@@ -66,3 +66,4 @@ def add_user(form: RegisterForm) -> None:
     add_team(user.id, team_name=f"Personal {user.name}'s team")
     with db_session.create_session() as session:
         session.add(user)
+        session.commit()

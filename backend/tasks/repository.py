@@ -14,7 +14,8 @@ class TaskRepository:
 
     def add(
             self,
-            creator: User,
+            creator_id: int,
+            team_id: int,
             name: str,
             description: str,
             deadline: datetime | None = None,
@@ -22,7 +23,8 @@ class TaskRepository:
     ) -> None:
         """Create new task and save it to database.
 
-        :param creator: task creator object.
+        :param team_id:
+        :param creator_id:
         :param name: the task name (task header).
         :param description: the task description.
         :param deadline: datetime, when task should be done.
@@ -33,12 +35,12 @@ class TaskRepository:
         task = Task()
         task.name = name
         task.description = description
-        task.team_id = creator.current_team_id
+        task.team_id = team_id
         if deadline is not None:
             task.deadline = deadline
         if status_id is not None:
             task.status_id = status_id
-            task.creator_id = creator.id
+            task.creator_id = creator_id
         self.session.add(task)
         self.session.commit()
 

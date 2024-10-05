@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
+
 from db_session import SqlAlchemyBase
 from sqlalchemy import Column, String, Integer, TIMESTAMP, ForeignKey
 from flask_login import UserMixin

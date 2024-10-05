@@ -3,7 +3,8 @@ from typing import Callable
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session, declarative_base
-from config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
+from config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME, DB_USER_TEST, DB_PASS_TEST, DB_HOST_TEST, DB_NAME_TEST, \
+    DB_PORT_TEST
 
 SqlAlchemyBase = declarative_base()
 
@@ -42,3 +43,4 @@ def create_session() -> Session:
 
     global __factory
     return __factory()
+
