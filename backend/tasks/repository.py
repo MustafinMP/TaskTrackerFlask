@@ -4,7 +4,7 @@ from sqlalchemy import select, update, and_, delete
 from sqlalchemy.orm import Session, joinedload
 
 from auth.models import User
-from tasks.models import Task, Tag
+from tasks.models import Task, Tag, Status
 from teams.models import Team
 
 
@@ -66,7 +66,7 @@ class TaskRepository:
     def get_by_id(self, task_id: int) -> Task | None:
         """Find task by id.
 
-        :param team_id:
+        :param task_id:
         :param task_id: the id of task.
         :return: task object or none.
         """
@@ -134,6 +134,22 @@ class TaskRepository:
         self.session.execute(stmt)
         self.session.commit()
 
+    def update_object(
+            self,
+            task: Task,
+            new_name: str = None,
+            new_description: str = None,
+            new_status_id: int = None
+    ) -> None:
+        if new_name:
+            task.name = new_name
+        if new_description:
+            task.description = new_description
+        if new_status_id:
+            task.status_id = new_status_id
+        self.session.add(task)
+        self.session.commit()
+
     def delete_by_id(self, task_id: int) -> None:
         """Delete the task from database by id.
 
@@ -150,3 +166,20 @@ class TaskRepository:
     def delete_object(self, task: Task) -> None:
         self.session.delete(task)
         self.session.commit()
+
+
+class StatusRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get_by_id(self, status_id: int) -> Status:
+        stmt = select(Status).where(
+            Status.id == status_id
+        )
+        return self.session.scalar(stmt)
+
+    def get_all(self) -> list[Status]:
+        stmt = select(Status)
+        return self.session.scalars(stmt).all()
+
+

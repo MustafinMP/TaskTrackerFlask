@@ -93,7 +93,6 @@ def change_task_status():
     task_id = request.args.get('task_id')
     new_status_id = request.args.get('status_id')
     try:
-        task = task_service.get_task_by_id(task_id)
         task_service.update_task(task_id, new_status_id=new_status_id)
         return jsonify({'status': 200, 'message': None})
     except TaskDoesNotExistError:
