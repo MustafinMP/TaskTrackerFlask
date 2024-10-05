@@ -11,17 +11,6 @@ from tasks.repository import TaskRepository
 from teams.models import Team, user_to_team
 
 
-def get_all_statuses() -> list[Status, ...]:
-    """Find all task statuses in database
-
-    :return: list of status objects.
-    """
-
-    with db_session.create_session() as session:
-        stmt = select(Status)
-        return session.scalars(stmt).all()
-
-
 def add_task(name: str, description: str, deadline: datetime | None = None, status_id: int | None = None) -> None:
     """Create new task and save it to database.
 
@@ -31,35 +20,30 @@ def add_task(name: str, description: str, deadline: datetime | None = None, stat
     :param status_id: the id of task status.
     :return: no return.
     """
-
     with db_session.create_session() as session:
-        task = Task()
-        task.name = name
-        task.description = description
-        task.team_id = current_user.current_team_id
-        if deadline is not None:
-            task.deadline = deadline
-        if status_id is not None:
-            task.status_id = status_id
-            task.creator_id = current_user.id
-        session.add(task)
-        session.commit()
+        repository = TaskRepository(session)
+        repository.add(
+            current_user.id,
+            current_user.current_team_id,
+            name,
+            description,
+            deadline,
+            status_id
+        )
 
 
-def get_task_by_status(status_id: int) -> list[Task, ...]:
-    """Find tasks by their status.
-
-    :param status_id: the id of task status.
-    :return: list of tasks with current status.
-    """
-
-    stmt = select(Task).where(
-        Task.status_id == status_id
-    ).join(Task.team).filter(
-        Team.id == current_user.current_team_id
-    )
+def get_tasks_by_statuses(team_id: int) -> (list[Status, ...], dict[int, list[Task, ...]]):
     with db_session.create_session() as session:
-        return session.scalars(stmt).unique().all()
+        status_stmt = select(Status)
+        statuses: list[Status, ...] = session.scalars(status_stmt).all()
+        statuses.sort(key=lambda status: status.id)
+
+        repository = TaskRepository(session)
+        tasks: dict[int, list[Task, ...]] = {
+            status.id: repository.get_by_status(status.id, team_id)
+            for status in statuses
+        }
+        return statuses, tasks
 
 
 def get_task_by_id(task_id: int) -> Task | None:
@@ -80,14 +64,19 @@ def get_task_by_id(task_id: int) -> Task | None:
         return session.scalar(stmt)
 
 
-def get_task_by_team_id(team_id: int) -> list[Task, ...]:
-    stmt = select(Task).join(Task.team).filter(
-        Team.id == team_id
-    ).options(
-        joinedload(Task.creator)
-    )
+def get_task_by_id2(task_id: int) -> Task | None:
+    """Find task by id.
+
+    :param task_id: the id of task.
+    :return: task object or none.
+    """
+
     with db_session.create_session() as session:
-        return session.scalars(stmt).unique()
+        repository = TaskRepository(session)
+        task = repository.get_by_id(task_id, current_user.current_team_id)
+        if task:
+            return task
+        raise TaskDoesNotExistError
 
 
 def update_task(task_id: int, new_name: str = None, new_description: str = None, new_status_id: int = None) -> None:
@@ -120,25 +109,6 @@ def update_task(task_id: int, new_name: str = None, new_description: str = None,
         session.commit()
 
 
-def delete_task(task_id: int) -> None:
-    """Delete the task from database by id.
-
-    :param task_id: the id of the task.
-    :return: no return.
-    """
-
-    stmt = delete(Task).where(
-        and_(
-            Task.id == task_id,
-            Task.team_id == user_to_team.c.team,
-            user_to_team.c.team == current_user.current_team_id
-        )
-    )
-    with db_session.create_session() as session:
-        session.execute(stmt)
-        session.commit()
-
-
 def add_tag_to_task(task_id: int, tag_id: int) -> None:
     """Add tag to task.
 
@@ -162,7 +132,7 @@ def add_tag_to_task(task_id: int, tag_id: int) -> None:
         session.commit()
 
 
-def delete_task2(task_id: int) -> None:
+def delete_task(task_id: int) -> None:
     with db_session.create_session() as session:
         repository = TaskRepository(session)
         task: Task = repository.get_by_id(task_id)

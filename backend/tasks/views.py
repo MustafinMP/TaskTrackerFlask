@@ -14,13 +14,7 @@ prefix: str = '/tasks'
 @blueprint.route('/')
 def tasks_by_statuses():
     if current_user.is_authenticated:
-        statuses: list[Status, ...] = task_service.get_all_statuses()
-        statuses.sort(key=lambda status: status.id)
-
-        tasks: dict[int, list[Task, ...]] = {
-            status.id: task_service.get_task_by_status(status.id)
-            for status in statuses
-        }
+        statuses, tasks = task_service.get_tasks_by_statuses(current_user.current_team_id)
 
         return render_template(prefix + '/tasks_by_statuses.html',
                                statuses=statuses,
@@ -77,11 +71,8 @@ def update_task(task_id: int):
 @blueprint.route('/delete/<int:task_id>')
 @login_required
 def delete_task(task_id: int):
-    # if task_service.get_task_by_id(task_id) is None:
-    #     return abort(404)
-    # task_service.delete_task(task_id)
     try:
-        task_service.delete_task2(task_id)
+        task_service.delete_task(task_id)
         return redirect('/tasks')
     except TaskDoesNotExistError:
         return abort(404)
