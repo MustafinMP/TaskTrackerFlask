@@ -40,32 +40,39 @@ def create_task():
 @blueprint.route('/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def show_task(task_id: int):
-    if (task := task_service.get_task_by_id(task_id)) is None:
-        return abort(404)
-
-    form: ChangeStatusForm = create_change_status_form(task)
-    if form.validate_on_submit():
-        task_service.update_task(task_id, new_status_id=form.new_status.data)
+    try:
         task = task_service.get_task_by_id(task_id)
-        return render_template(prefix + '/show_task.html', task=task, form=form, save=True)
-    return render_template(prefix + '/single_task.html', task=task, form=form, save=False)
+        form: ChangeStatusForm = create_change_status_form(task)
+        if form.validate_on_submit():
+            task_service.update_task(task_id, new_status_id=form.new_status.data)
+            task = task_service.get_task_by_id(task_id)
+            return render_template(prefix + '/single_task.html', task=task, form=form, save=True)
+        return render_template(prefix + '/single_task.html', task=task, form=form, save=False)
+    except TaskDoesNotExistError:
+        return abort(404)
+    except UserPermissionError:
+        return abort(404)
 
 
 @blueprint.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def update_task(task_id: int):
-    if (task := task_service.get_task_by_id(task_id)) is None:
+    try:
+        task = task_service.get_task_by_id(task_id)
+        form: EditTaskForm = create_edit_task_form(task)
+
+        if request.method == 'GET':
+            form.name.data = task.name
+            form.description.data = task.description
+            return render_template(prefix + '/edit.html', form=form, title='Изменить задачу')
+
+        if form.validate_on_submit:
+            task_service.update_task(task_id, form.name.data, form.description.data, form.new_status.data)
+            return redirect(f'/tasks/{task_id}')
+    except TaskDoesNotExistError:
         return abort(404)
-    form: EditTaskForm = create_edit_task_form(task)
-
-    if request.method == 'GET':
-        form.name.data = task.name
-        form.description.data = task.description
-        return render_template(prefix + '/edit.html', form=form, title='Изменить задачу')
-
-    if form.validate_on_submit:
-        task_service.update_task(task_id, form.name.data, form.description.data, form.new_status.data)
-        return redirect(f'/tasks/{task_id}')
+    except UserPermissionError:
+        return abort(404)
 
 
 @blueprint.route('/delete/<int:task_id>')
@@ -85,7 +92,11 @@ def delete_task(task_id: int):
 def change_task_status():
     task_id = request.args.get('task_id')
     new_status_id = request.args.get('status_id')
-    if task_service.get_task_by_id(task_id) is None:
+    try:
+        task = task_service.get_task_by_id(task_id)
+        task_service.update_task(task_id, new_status_id=new_status_id)
+        return jsonify({'status': 200, 'message': None})
+    except TaskDoesNotExistError:
         return abort(404)
-    task_service.update_task(task_id, new_status_id=new_status_id)
-    return jsonify({'status': 200, 'message': None})
+    except UserPermissionError:
+        return abort(404)

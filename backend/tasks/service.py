@@ -9,6 +9,7 @@ from tasks.exceptions import TaskDoesNotExistError, UserPermissionError
 from tasks.models import Status, Task, Tag
 from tasks.repository import TaskRepository
 from teams.models import Team, user_to_team
+from teams.service import user_in_team_by_ids
 
 
 def add_task(name: str, description: str, deadline: datetime | None = None, status_id: int | None = None) -> None:
@@ -46,25 +47,7 @@ def get_tasks_by_statuses(team_id: int) -> (list[Status, ...], dict[int, list[Ta
         return statuses, tasks
 
 
-def get_task_by_id(task_id: int) -> Task | None:
-    """Find task by id.
-
-    :param task_id: the id of task.
-    :return: task object or none.
-    """
-
-    stmt = select(Task).where(
-        Task.id == task_id
-    ).join(Task.team).filter(
-        Team.id == current_user.current_team_id
-    ).options(
-        joinedload(Task.creator)
-    )
-    with db_session.create_session() as session:
-        return session.scalar(stmt)
-
-
-def get_task_by_id2(task_id: int) -> Task | None:
+def get_task_by_id(task_id: int) -> Task:
     """Find task by id.
 
     :param task_id: the id of task.
@@ -73,10 +56,12 @@ def get_task_by_id2(task_id: int) -> Task | None:
 
     with db_session.create_session() as session:
         repository = TaskRepository(session)
-        task = repository.get_by_id(task_id, current_user.current_team_id)
-        if task:
-            return task
-        raise TaskDoesNotExistError
+        task = repository.get_by_id(task_id)
+        if not task:
+            raise TaskDoesNotExistError
+        if not user_in_team_by_ids(current_user.id, task.team.id):
+            raise UserPermissionError
+        return task
 
 
 def update_task(task_id: int, new_name: str = None, new_description: str = None, new_status_id: int = None) -> None:

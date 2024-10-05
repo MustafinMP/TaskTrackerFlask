@@ -63,7 +63,7 @@ class TaskRepository:
         tag.tasks.append(task)
         self.session.commit()
 
-    def get_by_id(self, task_id: int, team_id: int = None) -> Task | None:
+    def get_by_id(self, task_id: int) -> Task | None:
         """Find task by id.
 
         :param team_id:

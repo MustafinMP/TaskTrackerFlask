@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
 
 import tasks.service as tasks_srv
+from tasks.exceptions import TaskDoesNotExistError, UserPermissionError
 from timer.timer import TimerManager
 
 blueprint = Blueprint('timers', __name__)
@@ -15,13 +16,14 @@ timer_manager.run()
 @blueprint.route('/create/<int:task_id>', methods=['GET'])
 @login_required
 def create_timer(task_id: int):
-    if (task := tasks_srv.get_task_by_id(task_id)) is None:
+    try:
+        task = tasks_srv.get_task_by_id(task_id)
+        timer_manager.add_timer(current_user.id, task_id)
+        return jsonify({'status': 200, 'message': None})
+    except TaskDoesNotExistError:
         return jsonify({'status': 404, 'message': "Task doesn't exist"})
-    if task.creator_id != current_user.id:
+    except UserPermissionError:
         return jsonify({'status': 403, 'message': "Forbidden"})
-
-    timer_manager.add_timer(current_user.id, task_id)
-    return jsonify({'status': 200, 'message': None})
 
 
 @blueprint.route('/check', methods=['GET'])
