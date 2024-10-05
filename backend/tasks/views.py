@@ -4,7 +4,6 @@ from flask_login import login_required, current_user
 from tasks.exceptions import UserPermissionError, TaskDoesNotExistError
 from tasks.forms import CreateTaskForm, ChangeStatusForm, EditTaskForm, create_change_status_form, \
     create_edit_task_form
-from tasks.models import Task, Status
 import tasks.service as task_service
 
 blueprint = Blueprint('tasks', __name__)
@@ -14,7 +13,9 @@ prefix: str = '/tasks'
 @blueprint.route('/')
 def tasks_by_statuses():
     if current_user.is_authenticated:
-        statuses, tasks = task_service.get_tasks_by_statuses(current_user.current_team_id)
+        statuses = task_service.get_statuses()
+        statuses.sort(key=lambda status: status.id)
+        tasks = task_service.get_tasks_by_statuses(current_user.current_team_id, statuses)
 
         return render_template(prefix + '/tasks_by_statuses.html',
                                statuses=statuses,
@@ -56,7 +57,7 @@ def show_task(task_id: int):
 
 @blueprint.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 @login_required
-def update_task(task_id: int):
+def edit_task(task_id: int):
     try:
         task = task_service.get_task_by_id(task_id)
         form: EditTaskForm = create_edit_task_form(task)

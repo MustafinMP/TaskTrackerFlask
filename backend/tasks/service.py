@@ -18,6 +18,7 @@ def add_task(name: str, description: str, deadline: datetime | None = None, stat
     :param status_id: the id of task status.
     :return: no return.
     """
+
     with db_session.create_session() as session:
         repository = TaskRepository(session)
         repository.add(
@@ -30,18 +31,14 @@ def add_task(name: str, description: str, deadline: datetime | None = None, stat
         )
 
 
-def get_tasks_by_statuses(team_id: int) -> (list[Status, ...], dict[int, list[Task, ...]]):
+def get_tasks_by_statuses(team_id: int, statuses: list[Status]) -> dict[int, list[Task]]:
     with db_session.create_session() as session:
-        status_repository = StatusRepository(session)
-        statuses = status_repository.get_all()
-        statuses.sort(key=lambda status: status.id)
-
-        task_repository = TaskRepository(session)
-        tasks: dict[int, list[Task, ...]] = {
-            status.id: task_repository.get_by_status(status.id, team_id)
+        repository = TaskRepository(session)
+        tasks = {
+            status.id: repository.get_by_status(status.id, team_id)
             for status in statuses
         }
-        return statuses, tasks
+        return tasks
 
 
 def get_task_by_id(task_id: int) -> Task:
@@ -95,3 +92,9 @@ def delete_task(task_id: int) -> None:
         if current_user not in task.team.members:
             raise UserPermissionError
         repository.delete_object(task)
+
+
+def get_statuses() -> list[Status]:
+    with db_session.create_session() as session:
+        repository = StatusRepository(session)
+        return repository.get_all()
