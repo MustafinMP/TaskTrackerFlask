@@ -56,8 +56,8 @@ def get_user_teams_by_id(user_id: int) -> list[Team, ...]:
 def user_in_team_by_ids(user_id: int, team_id: int) -> bool:
     stmt = select(user_to_team).where(
         and_(
-            user_to_team.user == user_id,
-            user_to_team.team == team_id,
+            user_to_team.c.user == user_id,
+            user_to_team.c.team == team_id,
         )
     )
     with db_session.create_session() as session:

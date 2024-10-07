@@ -42,6 +42,11 @@ def index():
     return redirect(url_for('auth.login'))
 
 
+@app.errorhandler(404)
+def error404(e):
+    return render_template('errors/404.html')
+
+
 def main():
     """Just a main function.
 
