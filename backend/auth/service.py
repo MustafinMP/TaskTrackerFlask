@@ -5,8 +5,11 @@ from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 
 import db_session
+from auth.exceptions import UserDoesNotExistError
 from auth.forms import RegisterForm
 from auth.models import User
+from auth.repository import UserRepository
+from teams.repository import TeamRepository
 from teams.service import add_team
 
 
@@ -25,8 +28,8 @@ def get_user_by_id(user_id: int) -> User | None:
     """
 
     with db_session.create_session() as session:
-        stmt = select(User).where(User.id == user_id).options(joinedload(User.teams))
-        return session.scalar(stmt)
+        repository = UserRepository(session)
+        return repository.get_by_id(user_id)
 
 
 def get_user_by_email(user_email: str) -> User | None:
@@ -37,8 +40,11 @@ def get_user_by_email(user_email: str) -> User | None:
     """
 
     with db_session.create_session() as session:
-        stmt = select(User).where(User.email == user_email)
-        return session.scalar(stmt)
+        repository = UserRepository(session)
+        user = repository.get_by_email(user_email)
+        if not user:
+            raise UserDoesNotExistError
+        return user
 
 
 def user_exists_by_email(user_email: str) -> bool:
@@ -47,8 +53,11 @@ def user_exists_by_email(user_email: str) -> bool:
     :param user_email: the email of the user.
     :return: user object or none.
     """
-
-    return get_user_by_email(user_email) is not None
+    try:
+        get_user_by_email(user_email)
+        return True
+    except UserDoesNotExistError:
+        return False
 
 
 def add_user(form: RegisterForm) -> None:
@@ -58,12 +67,14 @@ def add_user(form: RegisterForm) -> None:
     :return: no return.
     """
 
-    user = User()
-    user.name = form.name.data
-    user.email = form.email.data
-    user.set_password(form.password.data)
     save_file(form.image.data)
-    add_team(user.id, team_name=f"Personal {user.name}'s team")
     with db_session.create_session() as session:
-        session.add(user)
-        session.commit()
+        user_repository = UserRepository(session)
+        user_repository.add(
+            form.name.data,
+            form.email.data,
+            form.password.data
+        )
+        user = user_repository.get_by_email(form.email.data)
+        team_repository = TeamRepository(session)
+        team_repository.add(user.id, team_name=f"Personal {user.name}'s team")

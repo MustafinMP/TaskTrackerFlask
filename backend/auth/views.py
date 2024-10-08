@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 
 import db_session
+from auth.exceptions import UserDoesNotExistError
 from auth.forms import LoginForm, RegisterForm
 from auth.models import User
 import auth.service as auth_srv
@@ -39,11 +40,14 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user: User = auth_srv.get_user_by_email(form.email.data)
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect("/tasks")
-        return render_template(prefix + '/login.html', message="Неправильный логин или пароль", form=form)
+        try:
+            user: User = auth_srv.get_user_by_email(form.email.data)
+            if user.check_password(form.password.data):
+                login_user(user, remember=form.remember_me.data)
+                return redirect("/tasks")
+            return render_template(prefix + '/login.html', message="Неправильный логин или пароль", form=form)
+        except UserDoesNotExistError:
+            return render_template(prefix + '/login.html', message="Неправильный логин или пароль", form=form)
     return render_template(prefix + '/login.html', title='Авторизация', form=form)
 
 
