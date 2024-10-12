@@ -39,7 +39,7 @@ def get_user_teams_by_id(user_id: int) -> list[Team, ...]:
 def user_in_team_by_ids(user_id: int, team_id: int) -> bool:
     with db_session.create_session() as session:
         repository = TeamRepository(session)
-        repository.have_member_by_ids(user_id, team_id)
+        return repository.have_member_by_ids(user_id, team_id)
 
 
 def get_team_by_id(team_id: int) -> Team:

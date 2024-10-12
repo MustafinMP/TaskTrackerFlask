@@ -1,6 +1,7 @@
 from datetime import datetime
+from typing import Optional, List
 
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy_serializer import SerializerMixin
 
 
@@ -25,13 +26,13 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     __tablename__ = 'user'
 
-    id: int = Column(Integer, primary_key=True, autoincrement=True)
-    name: str = Column(String, nullable=True)
-    email: str = Column(String, index=True, unique=True, nullable=True)
-    hashed_password: str = Column(String, nullable=True)
-    created_date: datetime = Column(TIMESTAMP, default=datetime.now)
-    image: str = Column(String, nullable=True, default='default.png')
-    current_team_id: int = Column(Integer, ForeignKey('team.id'), nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[Optional[str]] = mapped_column(String)
+    email: Mapped[Optional[str]] = mapped_column(String, index=True, unique=True)
+    hashed_password: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    created_date: Mapped[datetime] = mapped_column(TIMESTAMP, default=datetime.now)
+    image: Mapped[Optional[str]] = mapped_column(String, default='default.png')
+    current_team_id: Mapped[Optional[int]] = Column(ForeignKey('team.id'))
 
     current_team = relationship('Team', foreign_keys=[current_team_id], lazy="joined")
     teams = relationship('Team', secondary='user_to_team', back_populates='members', lazy="joined")
