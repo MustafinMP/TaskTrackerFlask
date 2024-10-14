@@ -38,17 +38,17 @@ def create_task():
     return render_template(prefix + '/create.html', form=form, title='Добавить задачу')
 
 
-@blueprint.route('/<int:task_id>', methods=['GET', 'POST'])
+@blueprint.route('/<int:task_id>', methods=['GET'])
 @login_required
 def show_task(task_id: int):
     try:
         task = task_service.get_task_by_id(task_id)
-        form: ChangeStatusForm = create_change_status_form(task)
-        if form.validate_on_submit():
-            task_service.update_task(task_id, new_status_id=form.new_status.data)
-            task = task_service.get_task_by_id(task_id)
-            return render_template(prefix + '/single_task.html', task=task, form=form, save=True)
-        return render_template(prefix + '/single_task.html', task=task, form=form, save=False)
+        return render_template(
+            prefix + '/single_task.html',
+            task=task,
+            save=False,
+            statuses=task_service.get_statuses()
+        )
     except TaskDoesNotExistError:
         return abort(404)
     except UserPermissionError:
@@ -88,13 +88,12 @@ def delete_task(task_id: int):
         return abort(404)
 
 
-@blueprint.route('/change_status')
+@blueprint.route('/change_status', methods=['POST'])
 @login_required
 def change_task_status():
-    task_id = request.args.get('task_id')
-    new_status_id = request.args.get('status_id')
+    data = request.json
     try:
-        task_service.update_task(task_id, new_status_id=new_status_id)
+        task_service.update_task(data['task_id'], new_status_id=data['new_status_id'])
         return jsonify({'status': 200, 'message': None})
     except TaskDoesNotExistError:
         return abort(404)

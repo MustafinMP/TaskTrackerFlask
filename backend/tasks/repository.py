@@ -145,9 +145,9 @@ class TaskRepository:
             task.name = new_name
         if new_description:
             task.description = new_description
-        if new_status_id:
+        if new_status_id is not None:
             task.status_id = new_status_id
-        self.session.add(task)
+        self.session.merge(task)
         self.session.commit()
 
     def delete_by_id(self, task_id: int) -> None:
