@@ -82,15 +82,3 @@ def add_user(form: RegisterForm) -> None:
         team_repository.add(user.id, team_name=f"Personal {user.name}'s team")
 
 
-def add_yandex_oauth_id(user_id: int, yandex_id: str) -> None:
-    with db_session.create_session() as session:
-        repository = UserRepository(session)
-        repository.add_yandex_oauth_id(user_id, yandex_id)
-
-
-def login_by_yandex_id(yandex_id: str) -> None:
-    with db_session.create_session() as session:
-        repository = UserRepository(session)
-        user = repository.get_by_yandex_id(yandex_id)
-        login_user(user)
-
