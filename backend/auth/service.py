@@ -1,5 +1,6 @@
 import os
 
+from flask_login import login_user
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
@@ -9,6 +10,7 @@ from auth.exceptions import UserDoesNotExistError
 from auth.forms import RegisterForm
 from auth.models import User
 from auth.repository import UserRepository
+from auth.views import login
 from teams.repository import TeamRepository
 from teams.service import add_team
 
@@ -78,3 +80,17 @@ def add_user(form: RegisterForm) -> None:
         user = user_repository.get_by_email(form.email.data)
         team_repository = TeamRepository(session)
         team_repository.add(user.id, team_name=f"Personal {user.name}'s team")
+
+
+def add_yandex_oauth_id(user_id: int, yandex_id: str) -> None:
+    with db_session.create_session() as session:
+        repository = UserRepository(session)
+        repository.add_yandex_oauth_id(user_id, yandex_id)
+
+
+def login_by_yandex_id(yandex_id: str) -> None:
+    with db_session.create_session() as session:
+        repository = UserRepository(session)
+        user = repository.get_by_yandex_id(yandex_id)
+        login_user(user)
+

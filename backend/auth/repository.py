@@ -28,6 +28,16 @@ class UserRepository:
         stmt = select(User).where(User.email == user_email)
         return self.session.scalar(stmt)
 
+    def get_by_yandex_id(self, yandex_id: int) -> User | None:
+        """Find user in database by id.
+
+        :param yandex_id: the yandex oauth id of the user.
+        :return: user object or none.
+        """
+
+        stmt = select(User).where(User.oauth_yandex_id == yandex_id).options(joinedload(User.teams))
+        return self.session.scalar(stmt)
+
     def add(self, name: str, email: str, password: str) -> None:
         """Create new user by data from register form.
 
@@ -42,4 +52,10 @@ class UserRepository:
         user.email = email
         user.set_password(password)
         self.session.add(user)
+        self.session.commit()
+
+    def add_yandex_oauth_id(self, user_id: int, yandex_id: str) -> None:
+        user = self.get_by_id(user_id)
+        user.oauth_yandex_id = yandex_id
+        self.session.merge(user)
         self.session.commit()

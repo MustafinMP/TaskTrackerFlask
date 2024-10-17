@@ -21,6 +21,10 @@ DB_PASS_TEST = os.environ.get('DB_PASS_TEST')
 INVITE_LINK_SALT = os.environ.get('INVITE_LINK_SALT')
 MIN_DEADLINE_GAP = timedelta(minutes=5)
 
+YA_CLIENT_ID = os.environ.get('YA_CLIENT_ID')
+YANDEX_API_REQUEST = os.environ.get('YANDEX_API_REQUEST')
+YA_CLIENT_SECRET = os.environ.get('YA_CLIENT_SECRET')
+
 
 mode = 'local'
 HOST = 'localhost' if mode == 'local' else '192.168.0.14'

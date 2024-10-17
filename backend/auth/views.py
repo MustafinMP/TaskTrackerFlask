@@ -1,12 +1,13 @@
-from flask import Blueprint, redirect, render_template
+import requests
+from flask import Blueprint, redirect, render_template, request
 from flask_login import login_user, logout_user, login_required, current_user
-
 
 import db_session
 from auth.exceptions import UserDoesNotExistError
 from auth.forms import LoginForm, RegisterForm
 from auth.models import User
 import auth.service as auth_srv
+from config import YANDEX_API_REQUEST, YA_CLIENT_ID, YA_CLIENT_SECRET
 from tasks.models import Task, Status
 
 blueprint = Blueprint('auth', __name__)
@@ -75,3 +76,41 @@ def profile():
 @login_required
 def edit_profile():
     return render_template(prefix + '/profile.html')
+
+
+@blueprint.route('/yandex-login')
+def yandex_login():
+    """Reginster or sign in by means of Yandex Account."""
+    redirect_url = YANDEX_API_REQUEST
+    return redirect(redirect_url)
+
+
+@blueprint.route('/yandex-callback')
+def yandex_callback():
+    """Fetch a response from Yandex."""
+    code = request.args.get('code')
+    if code:
+        token_url = 'https://oauth.yandex.ru/token'
+        token_params = {
+            'grant_type': 'authorization_code',
+            'code': code,
+            'client_id': YA_CLIENT_ID,
+            'client_secret': YA_CLIENT_SECRET
+        }
+        response = requests.post(token_url, data=token_params)
+        data = response.json()
+        if 'access_token' in data:
+            user_info_url = 'https://login.yandex.ru/info'
+            headers = {'Authorization': f'OAuth {data['access_token']}'}
+            user_info_response = requests.post(user_info_url, headers=headers)
+            user_info = user_info_response.json()
+            print(user_info)
+            username = user_info.get('login')
+            email = user_info.get('default_email')
+            social_uid = str(user_info.get('id'))
+            print(current_user)
+            if current_user.is_authenticated and current_user.oauth_yandex_id is None:
+                auth_srv.add_yandex_oauth_id(current_user.id, social_uid)
+            elif not current_user.is_authenticated:
+                auth_srv.login_by_yandex_id(social_uid)
+    return redirect('/')

@@ -37,6 +37,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     current_team = relationship('Team', foreign_keys=[current_team_id], lazy="joined")
     teams = relationship('Team', secondary='user_to_team', back_populates='members', lazy="joined")
 
+    oauth_yandex_id: Mapped[Optional[str]] = mapped_column(String, unique=True)
+
     def set_password(self, password: str) -> None:
         """Create hash of user password and save it.
 
