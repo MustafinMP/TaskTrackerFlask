@@ -1,4 +1,3 @@
-import requests
 from flask import Blueprint, redirect, render_template, request
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -8,7 +7,7 @@ from auth.exceptions import UserDoesNotExistError
 from auth.forms import LoginForm, RegisterForm
 from auth.models import User
 import auth.service as auth_srv
-from config import YANDEX_API_REQUEST, YA_CLIENT_ID, YA_CLIENT_SECRET
+from config import YANDEX_API_REQUEST
 from tasks.models import Task, Status
 
 blueprint = Blueprint('auth', __name__)
@@ -54,9 +53,9 @@ def login():
 
 
 @blueprint.route('/logout')
-@login_required
 def logout():
-    logout_user()
+    if current_user.is_authenticated:
+        logout_user()
     return redirect("/")
 
 

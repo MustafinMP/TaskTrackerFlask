@@ -52,7 +52,7 @@
   color: var(--color-dark) !important;
 }
 
-.dark-filled {
+.dark-filled, .on-hover-dark-filled:hover {
   text-decoration: none;
   background: var(--color-dark);
   color: var(--color-light) !important;
