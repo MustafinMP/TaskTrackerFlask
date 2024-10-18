@@ -1,4 +1,4 @@
-.login-form {
+.auth-form {
   width: 30%;
   margin: 10rem 35% 0 35%;
   background: var(--color-light);
@@ -14,9 +14,10 @@
   margin: 1rem 0;
   border: none;
   border-radius: 0.5rem;
+  color: var(--color-light) !important;
 }
 
-.register-a {
+.register-a, .login-a {
   display: block;
   height: 3.5rem;
   text-decoration: none;
@@ -27,11 +28,23 @@
   border-radius: 0.5rem;
 }
 
+.load-image-block {
+  display: grid;
+  grid-template-columns: 1fr 3.5rem;
+  height: 3.5rem;
+  gap: 1rem;
+}
+
+.load-image-block * {
+  margin: 0;
+}
+
 .social-login {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin: 1rem 0;
   gap: 1rem;
+  border-radius: 0.5rem;
 }
 
 .yandex-login-a {

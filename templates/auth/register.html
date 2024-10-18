@@ -1,81 +1,89 @@
 {% extends "basic_template.html" %}
 
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/auth_forms.css') }}">
+{% endblock %}
+
 {% block content %}
-<form action="" method="post" class="mb-3 m-5 mx-auto p-5 w-50 bg-light" enctype="multipart/form-data">
-<h1>Регистрация</h1>
+
+<form action="" method="post" class="auth-form needs-validation white-filled" enctype="multipart/form-data">
+    <h1>Регистрация</h1>
     {{ form.hidden_tag() }}
+    <div>
+        {{ form.name.label }}<br>
+        {{ form.name(class="form-control") }}<br>
+        {% for error in form.name.errors %}
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
+        {% endfor %}
+    </div>
     <div>
         {{ form.email.label }}<br>
         {{ form.email(class="form-control", type="email") }}<br>
         {% for error in form.email.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
         {% endfor %}
     </div>
     <div>
         {{ form.password.label }}<br>
         {{ form.password(class="form-control", type="password") }}<br>
         {% for error in form.password.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
         {% endfor %}
     </div>
     <div>
         {{ form.password_again.label }}<br>
         {{ form.password_again(class="form-control", type="password") }}<br>
         {% for error in form.password_again.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
         {% endfor %}
     </div>
     <div>
-        {{ form.name.label }}<br>
-        {{ form.name(class="form-control") }}<br>
-        {% for error in form.name.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </div>
-    <div>
-        {{ form.image.label }}
-        <output id="image-output"></output>
-        {{ form.image(accept="image/*", style="display: none") }}
+        <article class="load-image-block">
+            {{ form.image.label(class="form-button light-filled") }}
+            <output id="image-output"></output>
+            {{ form.image(accept="image/*", style="display: none") }}
+        </article>
         {% for error in form.image.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
         {% endfor %}
     </div>
-
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{ form.submit(type="submit", class="form-button primary-filled") }}</p>
     {{message}}
-    <br>
-    <a href="/auth/login" class="text-dark mt-2">Уже есть аккаунт?</a>
+    <hr width="100%" size="2">
+    <a href="/auth/login" class="login-a light-filled">
+        Войти в Lite Tracker
+    </a>
 </form>
- <script type="text/javascript">
- if (window.FileReader) {
- 	document.getElementById('image').addEventListener('change', handleFileSelect, false);
- 	function handleFileSelect(evt) {
-	var files = evt.target.files;
-	var f = files[0];
-	var reader = new FileReader();
-	reader.onload = (
-		function(theFile) {
-			return function(e) {
-				document.getElementById('image-output').innerHTML = [
-					'<img src="', e.target.result,'" title="', theFile.name, '" width="50" />'
-					].join("");
-			};
-		}
-	)(f);
-	reader.readAsDataURL(f);
-}
- } else {
- 	alert('This browser does not support FileReader');
- }
- </script>
+<script type="text/javascript">
+    if (window.FileReader) {
+        document.getElementById('image').addEventListener('change', handleFileSelect, false);
+        function handleFileSelect(evt) {
+       var files = evt.target.files;
+       var f = files[0];
+       var reader = new FileReader();
+       reader.onload = (
+           function(theFile) {
+               return function(e) {
+                   document.getElementById('image-output').innerHTML = [
+                       '<img src="', e.target.result,'" title="', theFile.name, '" style="width: 100%; height: 100%; border-radius: 0.5rem;" />'
+                       ].join("");
+               };
+           }
+       )(f);
+       reader.readAsDataURL(f);
+   }
+    } else {
+        alert('This browser does not support FileReader');
+    }
+</script>
 {% endblock %}

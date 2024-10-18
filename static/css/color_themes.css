@@ -13,7 +13,7 @@
 .primary-filled, .primary-filled-with-hover {
   text-decoration: none;
   background: var(--color-primary);
-  color: var(--color-dark) !important;
+  color: var(--color-dark);
 }
 
 .secondary-filled {

@@ -1,12 +1,12 @@
 {% extends "basic_template.html" %}
 
 {% block links %}
-<link rel="stylesheet" href="{{ url_for('static', filename='/css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/auth_forms.css') }}">
 {% endblock %}
 
 {% block content %}
 
-<form action="" method="post" class="login-form needs-validation white-filled" novalidate>
+<form action="" method="post" class="auth-form needs-validation white-filled" novalidate>
     <h1>Вход</h1>
     {{ form.hidden_tag() }}
     <div>
@@ -31,17 +31,16 @@
     <p>{{ form.submit(type="submit", class="form-button primary-filled") }}</p>
     <div>{{ message }}</div>
     <hr width="100%" size="2">
-    <a href="/auth/register" class="register-a secondary-filled">
+    <a href="/auth/register" class="register-a light-filled">
         Зарегистрироваться
     </a>
     <section class="social-login">
-        <a href="{{ url_for('auth.yandex_login') }}" class="yandex-login-a dark-filled">
+        <a href="{{ url_for('auth.yandex_login') }}" class="yandex-login-a light-filled">
             <div></div>
             <img src="../static/img/yandex_logo.png"
                  style="width: 2rem; height: 2rem; border-radius: 50%; pointer-events: none; margin: 0;"/>
             <div></div>
         </a>
     </section>
-
 </form>
 {% endblock %}
