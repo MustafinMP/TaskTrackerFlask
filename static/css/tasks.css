@@ -1,0 +1,27 @@
+.status-header {
+  display: grid;
+  grid-template-columns: 1fr;
+  height: 3.5rem;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  padding-top: 0.8rem;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.custom-card {
+  display: block;
+  width: 90%;
+  aspect-ratio: 2/1;
+  border-radius: 0.25rem;
+  margin: 1rem;
+}
+
+.max-three-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 5rem;
+}

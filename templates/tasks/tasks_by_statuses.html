@@ -2,12 +2,15 @@
 
 {% block title %}Мои задачи{% endblock %}
 
-{% block content %}
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/tasks.css') }}">
+{% endblock %}
 
+{% block content %}
 <section class="tasks-grid">
     {% for status in statuses %}
     <article>
-        <h3 class="px-3 py-3 {{ status.color_tag }}-filled border-05r">{{ status.name }}</h3>
+        <div class="{{ status.color_tag }}-filled status-header">{{ status.name }}</div>
         <div class="py-2 white-filled border-05r">
             {% for task in tasks_by_statuses[status.id] %}
             <a href="/tasks/{{ task.id }}"

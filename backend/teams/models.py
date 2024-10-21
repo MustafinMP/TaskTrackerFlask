@@ -25,17 +25,6 @@ class Team(SqlAlchemyBase, SerializerMixin):
     members: Mapped[List['User']] = relationship(secondary=user_to_team, back_populates='teams', lazy="joined")
     creator = relationship('User', foreign_keys=[creator_id], lazy="joined")
 
-# class Role(SqlAlchemyBase):
-#     id: int = Column(Integer, primary_key=True, autoincrement=True)
-#     name: str = Column(String, nullable=False)
-#     team: int = Column(Integer, ForeignKey('team.id'))
-#     user: int = Column(Integer, ForeignKey('user.id'))
-#
-#
-# class Permission(SqlAlchemyBase):
-#     id: int = Column(Integer, primary_key=True, autoincrement=True)
-#     name: str = Column(String, nullable=False)
-
 
 class InviteLink(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'invite_link'
