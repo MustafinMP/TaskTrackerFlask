@@ -1,8 +1,4 @@
 import os
-
-from flask_login import login_user
-from sqlalchemy import select
-from sqlalchemy.orm import joinedload
 from werkzeug.utils import secure_filename
 
 import db_session
@@ -10,9 +6,7 @@ from auth.exceptions import UserDoesNotExistError
 from auth.forms import RegisterForm
 from auth.models import User
 from auth.repository import UserRepository
-from auth.views import login
 from teams.repository import TeamRepository
-from teams.service import add_team
 
 
 def save_file(file) -> str:

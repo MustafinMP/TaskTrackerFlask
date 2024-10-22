@@ -1,12 +1,8 @@
 .team-card {
-  display: block;
   padding: 1.2rem 2rem;
   margin-top: 2rem;
 }
 
-.team-card h6 {
-  font-size: 1.5rem;
-}
 
 .member-block {
   display: grid;

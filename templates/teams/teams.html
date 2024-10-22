@@ -2,10 +2,13 @@
 
 {% block title %}Мои команды{% endblock %}
 
-{% block content %}
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/teams.css') }}">
+{% endblock %}
 
+{% block content %}
 {% for team in teams %}
-<article class="white-filled border-1r team-card">
+<a class="white-filled border-1r team-card" href="{{ team.id }}">
     <h6>{{ team.name }}</h6>
     <div class="member-block">
         <div class="member-images">
@@ -30,7 +33,7 @@
         </div>
     </div>
     <div class="tasks">team tasks count</div>
-</article>
+</a>
 {% endfor %}
 
 <script>

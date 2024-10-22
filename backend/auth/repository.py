@@ -6,7 +6,7 @@ from auth.models import User
 
 class UserRepository:
     def __init__(self, session: Session):
-        self.session = session
+        self.session: Session = session
 
     def get_by_id(self, user_id: int) -> User | None:
         """Find user in database by id.

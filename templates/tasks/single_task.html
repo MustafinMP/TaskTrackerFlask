@@ -1,5 +1,9 @@
 {% extends "basic_template_with_navbar.html" %}
 
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/single_task.css') }}">
+{% endblock %}
+
 {% block title %}Task № {{ task.id }}{% endblock %}
 
 {% block content %}
@@ -32,11 +36,14 @@
     <p class="task-description py-3" style="font-size: 1.1rem;">{{ task.description }}</p>
 
     <div class="dropdown">
-        <button id="dropbtn-main" class="dropbtn {{ task.status.color_tag }}-filled border-05r">{{ task.status.name }}</button>
+        <button id="dropbtn-main" class="dropbtn {{ task.status.color_tag }}-filled border-05r">{{ task.status.name }}
+        </button>
         <div class="dropdown-content">
             {% for status in statuses %}
             <button class="dropbtn {{ status.color_tag }}-filled w-100"
-                    onclick="updateStatus({{ task.id }}, {{ status.id }}, '{{ status.name }}', '{{ status.color_tag }}')">{{ status.name }}</button>
+                    onclick="updateStatus({{ task.id }}, {{ status.id }}, '{{ status.name }}', '{{ status.color_tag }}')">
+                {{ status.name }}
+            </button>
             {% endfor %}
         </div>
     </div>

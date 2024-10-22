@@ -25,13 +25,6 @@ def create_team():
     return render_template(prefix + '/create_team.html', form=create_form, title='Создать команду')
 
 
-@blueprint.route('<int:team_id>/invite')
-@login_required
-def invite(team_id: int):
-    invite_link = generate_link(team_id)
-    return render_template(prefix + '/invite.html', invite_link=invite_link)
-
-
 @blueprint.route('/join')
 @login_required
 def join_team():
@@ -45,5 +38,11 @@ def join_team():
 @login_required
 def single_team(team_id: int):
     team = srv.get_team_by_id(team_id)
+    return render_template(prefix + '/single_team.html', team=team)
+
+
+@blueprint.route('<int:team_id>/invite')
+@login_required
+def invite(team_id: int):
     invite_link = generate_link(team_id)
-    return render_template(prefix + '/single_team.html', invite_link=invite_link, team=team)
+    return render_template(prefix + '/invite.html', invite_link=invite_link)
