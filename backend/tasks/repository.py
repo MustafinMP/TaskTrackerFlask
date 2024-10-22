@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import select, update, and_, delete
+from sqlalchemy import select, update, and_, delete, func
 from sqlalchemy.orm import Session, joinedload
 
 from auth.models import User
@@ -103,6 +103,12 @@ class TaskRepository:
             joinedload(Task.creator)
         )
         return self.session.scalars(stmt).unique()
+
+    def count_by_team_id(self, team_id: int) -> int:
+        stmt = select(func.count()).select_from(Task).join(Task.team).filter(
+            Team.id == team_id
+        )
+        return self.session.scalar(stmt)
 
     def update_by_id(
             self,
