@@ -1,62 +1,62 @@
 .auth-form {
-  width: 30%;
-  margin: 10rem 35% 0 35%;
-  background: var(--color-light);
-  padding: 4rem;
+    width: 30%;
+    margin: 10rem 35% 0 35%;
+    background: var(--color-light);
+    padding: 4rem;
 }
 
 .form-button {
-  display: block;
-  height: 3.5rem;
-  width: 100%;
-  font-size: 1.4rem;
-  padding: 0.7rem;
-  margin: 1rem 0;
-  border: none;
-  border-radius: 0.5rem;
-  color: var(--color-light) !important;
+    display: block;
+    height: 3.5rem;
+    width: 100%;
+    font-size: 1.4rem;
+    padding: 0.7rem;
+    margin: 1rem 0;
+    border: none;
+    border-radius: 0.5rem;
+    color: var(--color-light) !important;
 }
 
 .register-a, .login-a {
-  display: block;
-  height: 3.5rem;
-  text-decoration: none;
-  text-align: center;
-  font-size: 1.4rem;
-  padding: 0.7rem;
-  margin: 1rem 0;
-  border-radius: 0.5rem;
+    display: block;
+    height: 3.5rem;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 0.7rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
 }
 
 .load-image-block {
-  display: grid;
-  grid-template-columns: 1fr 3.5rem;
-  height: 3.5rem;
-  gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 3.5rem;
+    height: 3.5rem;
+    gap: 1rem;
 }
 
 .load-image-block * {
-  margin: 0;
+    margin: 0;
 }
 
 .social-login {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  margin: 1rem 0;
-  gap: 1rem;
-  border-radius: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 1rem 0;
+    gap: 1rem;
+    border-radius: 0.5rem;
 }
 
 .yandex-login-a {
-  display: grid;
-  grid-template-columns: 1fr 2rem 1fr;
-  height: 3.5rem;
-  text-decoration: none;
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr 2rem 1fr;
+    height: 3.5rem;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
 }
 
 body {
-  background: var(--color-light) !important;
+    background: var(--color-light) !important;
 }

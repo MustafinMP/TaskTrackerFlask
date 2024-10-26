@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
+from auth.exceptions import UserIsAlreadyExistsError
 from auth.models import User
 
 
@@ -46,6 +47,8 @@ class UserRepository:
         :param password:
         :return: no return.
         """
+        if self.get_by_email(email) is not None:
+            raise UserIsAlreadyExistsError
 
         user = User()
         user.name = name

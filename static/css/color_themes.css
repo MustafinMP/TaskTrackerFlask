@@ -1,85 +1,85 @@
 :root {
-  --color-primary: #4183d7;
-  --color-secondary: #bdc3c7;
-  --color-danger: #dc3545;
-  --color-warning: #f9bf3b;
-  --color-success: #26c281;
-  --color-light: #f8f8f8;
-  --color-dark: #22313a;
-  --color-white: #ffffff;
-  --color-primary-hover: #3498db;
+    --color-primary: #4183d7;
+    --color-secondary: #bdc3c7;
+    --color-danger: #dc3545;
+    --color-warning: #f9bf3b;
+    --color-success: #26c281;
+    --color-light: #f8f8f8;
+    --color-dark: #22313a;
+    --color-white: #ffffff;
+    --color-primary-hover: #3498db;
 }
 
 .primary-filled, .primary-filled-with-hover {
-  text-decoration: none;
-  background: var(--color-primary);
-  color: var(--color-dark);
+    text-decoration: none;
+    background: var(--color-primary);
+    color: var(--color-dark);
 }
 
 .secondary-filled {
-  text-decoration: none;
-  background: var(--color-secondary);
-  color: var(--color-dark) !important;
+    text-decoration: none;
+    background: var(--color-secondary);
+    color: var(--color-dark) !important;
 }
 
 .success-filled {
-  text-decoration: none;
-  background: var(--color-success);
-  color: var(--color-dark) !important;
+    text-decoration: none;
+    background: var(--color-success);
+    color: var(--color-dark) !important;
 }
 
 .warning-filled {
-  text-decoration: none;
-  background: var(--color-warning);
-  color: var(--color-dark) !important;
+    text-decoration: none;
+    background: var(--color-warning);
+    color: var(--color-dark) !important;
 }
 
 .danger-filled {
-  text-decoration: none;
-  background: var(--color-danger);
-  color: var(--color-dark) !important;
+    text-decoration: none;
+    background: var(--color-danger);
+    color: var(--color-dark) !important;
 }
 
 .light-filled, .light-filled-with-hover {
-  text-decoration: none;
-  background: var(--color-light);
-  color: var(--color-dark) !important;
+    text-decoration: none;
+    background: var(--color-light);
+    color: var(--color-dark) !important;
 }
 
 .white-filled, .white-filled-with-hover {
-  text-decoration: none;
-  background: var(--color-white);
-  color: var(--color-dark) !important;
+    text-decoration: none;
+    background: var(--color-white);
+    color: var(--color-dark) !important;
 }
 
 .dark-filled, .on-hover-dark-filled:hover {
-  text-decoration: none;
-  background: var(--color-dark);
-  color: var(--color-light) !important;
+    text-decoration: none;
+    background: var(--color-dark);
+    color: var(--color-light) !important;
 }
 
 .primary-filled-with-hover:hover {
-  background: var(--color-primary-hover);
-  color: var(--color-dark);
+    background: var(--color-primary-hover);
+    color: var(--color-dark);
 }
 
 .light-filled-with-hover:hover {
-  background: var(--color-secondary);
-  color: var(--color-dark) !important;
+    background: var(--color-secondary);
+    color: var(--color-dark) !important;
 }
 
 .white-filled-with-hover:hover {
-  background: var(--color-light);
-  color: var(--color-dark) !important;
+    background: var(--color-light);
+    color: var(--color-dark) !important;
 }
 
 .card-light {
-  background: var(--color-light);
-  border: 1px solid var(--color-white);
-  text-decoration: none;
-  color: var(--color-dark) !important;
+    background: var(--color-light);
+    border: 1px solid var(--color-white);
+    text-decoration: none;
+    color: var(--color-dark) !important;
 }
 
 body {
-  background: var(--color-light);
+    background: var(--color-light);
 }

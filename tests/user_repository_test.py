@@ -1,9 +1,9 @@
 import pytest
-from sqlalchemy import select, delete
+from sqlalchemy import delete
 
+from auth.exceptions import UserIsAlreadyExistsError
 from auth.models import User
 from auth.repository import UserRepository
-from tasks.repository import TaskRepository
 from tests.conftest import test_session, test_engine
 
 
@@ -23,7 +23,7 @@ def test_add_user_with_exist_email(test_session):
     try:
         user_repository.add('Test Name', 'test@mail.ru', 'secret123')
         assert False
-    except Exception:
+    except UserIsAlreadyExistsError:
         assert True
     delete_stmt = delete(User).where(User.email == 'test@mail.ru')
     test_session.execute(delete_stmt)

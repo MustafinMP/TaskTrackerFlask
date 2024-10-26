@@ -1,37 +1,37 @@
 .main-with-navbar {
-  display: grid;
-  grid-template-columns: 1fr 5fr;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
 }
 
 .border-1r {
-  border-radius: 1rem;
+    border-radius: 1rem;
 }
 
 .border-05r {
-  border-radius: 0.5rem;
+    border-radius: 0.5rem;
 }
 
 .border-025r {
-  border-radius: 0.25rem;
+    border-radius: 0.25rem;
 }
 
 
 .page-header {
-  margin: 3rem 7rem 3rem 7rem;
+    margin: 3rem 7rem 3rem 7rem;
 }
 
 .main-margin {
-  margin: 0 6rem 0 6rem;
+    margin: 0 6rem 0 6rem;
 }
 
 .tasks-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
 }
 
 .form-card {
-  border-radius: 1.5rem;
-  margin: 0rem 24rem 0 8rem;
-  padding: 1.5rem;
+    border-radius: 1.5rem;
+    margin: 0rem 24rem 0 8rem;
+    padding: 1.5rem;
 }
